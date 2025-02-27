@@ -2,8 +2,9 @@
 import React, { useEffect, useState } from "react";
 import Navbar from "../../components/Navbar";
 import Footer from "../../components/Footer";
-import ProductCardB from "../../components/ProductCardB";
+import ProductCardB from "../../components/ProductCardB"; 
 import ProductCardG from "../../components/ProductCardG";
+import ProductCardMore from "../../components/ProductCardMore"
 import { FaAngleDoubleRight } from "react-icons/fa";
 import Link from 'next/link';
 import axios from "axios";
@@ -15,7 +16,6 @@ const API_URL = 'http://localhost:5000';  // Replace with your backend API URL
 
 export default function Products() {
   const [products, setProducts] = useState([]);
-  const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
   // Fetch data from backend
@@ -26,22 +26,30 @@ export default function Products() {
         setProducts(response.data);
       } catch (err) {
         setError("Failed to load products.");
-      } finally {
-        setLoading(false);
       }
     };
 
     fetchProducts();
   }, []);
 
-  if (loading) return <div>Loading...</div>;
-  if (error) return <div>{error}</div>;
+  // Filter products based on category and get first 3 items from each category
+  const spices = products.filter(product => product.category === "Spice").slice(0, 3);
+  const herbs = products.filter(product => product.category === "Herb").slice(0, 3);
+  const handcrafts = products.filter(product => product.category === "Handcraft").slice(0, 3);
+  const foods = products.filter(product => product.category === "Food").slice(0, 3);
 
-  // Filter products based on category
-  const spices = products.filter(product => product.category === "Spice");
-  const herbs = products.filter(product => product.category === "Herb");
-  const handcrafts = products.filter(product => product.category === "Handcraft");
-  const foods = products.filter(product => product.category === "Food");
+  // Handle case where no products are available
+  if (!products.length) {
+    return (
+      <>
+        <Navbar />
+        <div className="container mx-auto py-[100px] text-center">
+          <h1 className="text-2xl text-gray-600">No products available</h1>
+        </div>
+        <Footer />
+      </>
+    );
+  }
 
   var settings = {
     dots: false,
@@ -101,7 +109,7 @@ export default function Products() {
         <h1 className="mb-20 text-[40px] font-bold text-center text-custom-brown">Spice Products</h1>
         <div className="flex justify-center gap-[100px]">
           {spices.map((product, index) => (
-            <ProductCardB key={index} {...product} />
+            <ProductCardB key={index} product={product} /> // Use ProductCardB for spice products
           ))}
         </div>
         
@@ -120,7 +128,7 @@ export default function Products() {
         <h1 className="mb-20 text-[40px] font-bold text-center text-custom-green">Herb Products</h1>
         <div className="flex justify-center gap-[100px]">
           {herbs.map((product, index) => (
-            <ProductCardG key={index} {...product} />
+            <ProductCardG key={index} product={product} /> // Use ProductCardG for herb products
           ))}
         </div>
         
@@ -139,7 +147,7 @@ export default function Products() {
         <h1 className="mb-20 text-[40px] font-bold text-center text-custom-brown">Handcraft Products</h1>
         <div className="flex justify-center gap-[100px]">
           {handcrafts.map((product, index) => (
-            <ProductCardB key={index} {...product} />
+            <ProductCardB key={index} product={product} /> // Use ProductCardB for handcraft products
           ))}
         </div>
 
@@ -158,7 +166,7 @@ export default function Products() {
         <h1 className="mb-20 text-[40px] font-bold text-center text-custom-green">Food & Beverages</h1>
         <div className="flex justify-center gap-[100px]">
           {foods.map((product, index) => (
-            <ProductCardG key={index} {...product} />
+            <ProductCardG key={index} product={product} /> // Use ProductCardG for food products
           ))}
         </div>
 
@@ -182,7 +190,7 @@ export default function Products() {
         <div className="slider-container">
           <Slider {...settings}>
             {products.map((product, index) => (
-              <ProductCardG className="py-10" key={index} {...product} />
+              <ProductCardMore className="py-10" key={index} product={product} /> // Display all products in slider using ProductCardG
             ))}
           </Slider>
         </div>
