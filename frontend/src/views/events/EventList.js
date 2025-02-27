@@ -16,27 +16,76 @@ const EventList = () => {
   const [error, setError] = useState('');
   const [modal, setModal] = useState(false);
   const [modal2, setModal2] = useState(false);
-  const [selectedid, setSelectedid] = useState(null);
+  const [selectedEventId, setSelectedEventId] = useState(null);
+
+  const refreshAccessToken = async () => {
+    const refreshToken = localStorage.getItem('refreshToken');
+    if (!refreshToken) return false; 
+
+    try {
+      const response = await axios.post(`${API_URL}/token`, {
+        refreshToken,
+      });
+
+      if (response.status === 200) {
+        localStorage.setItem('accessToken', response.data.accessToken);
+        return true; 
+      }
+    } catch (error) {
+      console.error('Refresh token error:', error);
+      return false; 
+    }
+    return false;
+  };
 
   const getAllEvents = async () => {
     try {
-      const response = await axios.get(`${API_URL}/api/event/all`);
+      let token = localStorage.getItem('accessToken');
+
+      const response = await axios.get(`${API_URL}/ev/getAll`, {
+        headers: {
+          Authorization: `Bearer ${token}`, 
+        },
+      });
       
-      setEvents(response.data.data);
+      setEvents(response.data.slice().reverse());
+      
     } catch (err) {
-      console.error('Error fetching events:', err);
-      alertTypes.error('Failed to fetch events!');
+      if (err.response && err.response.status === 401) {
+       
+        const refreshed = await refreshAccessToken();
+        if (refreshed) {
+          
+          const newToken = localStorage.getItem('accessToken');
+          const response = await axios.get(`${API_URL}/ev/getAll`, {
+            headers: {
+              Authorization: `Bearer ${newToken}`,
+            },
+          });
+          setEvents(response.data.slice().reverse());
+        } else {
+          
+          alertTypes.warning( 'Access Denied !' , 'Please log in.');
+        }
+      } else {
+       
+        alertTypes.error('Failed to fetch events!')
+      }
     } finally {
       setLoading(false);
     }
   };
+
+
+
+  const refreshEvents = getAllEvents();
 
   useEffect(() => {
     getAllEvents();
   }, []);
 
   if (loading) {
-    return <div>Loading events...</div>;
+    return <div>Loading Events...</div>;
   }
 
   if (error) {
@@ -44,54 +93,40 @@ const EventList = () => {
   }
 
 
-  const handleDelete = async (id) => {
+  
+  const handleDelete = async (eventId) => {
     const result = await alertTypes.confirmText('Are you sure?', "You won't be able to revert this!");
     
+
     if (result) {
-      try {
-        let token = localStorage.getItem('accessToken');
-        
-      
-        const response = await axios.post(
-          `${API_URL}/api/event/delete`, 
-          { id: id },  
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,  
-            },
-          }
-        );
-  
-        
-        if (response.data.status === 'success') {
-          // alertTypes.success(response.data.msg || 'event deleted successfully.');
-          
-          
-          setEvents(events.filter(event => event.id !== id));
-        } else {
-          alertTypes.error(response.data.msg || 'Failed to delete event!');
+        try {
+            const response = await apiRequest(`${API_URL}/ev/delete/${eventId}`, {
+                method: 'DELETE'
+            });
+            
+            console.log(response.message); 
+            setEvents(events.filter(event => event.eventId !== eventId));
+
+            
+        } catch (error) {
+            console.error(error);
+            alertTypes.error('Failed to delete event!'); 
         }
-      } catch (error) {
-        console.error('Error deleting event:', error);
-        alertTypes.error('Failed to delete event!');
-      }
+        console.log('Deletion confirmed!');
     }
-  };
-  
+};
 
 
 
 
-    
+    // ** Function to handle Modal toggle
     const handleModal = () => setModal(!modal)
     const CloseBtn = <X className='cursor-pointer' size={15} onClick={handleModal} />
 
 
-    const handleUpdate = (id) => {
-      setSelectedid(id);
-      setModal2(!modal2);
-          
-    };
+    const handleUpdate = (eventId) => {
+      setSelectedEventId(eventId);
+      setModal2(!modal2)};
 
     const CloseBtn2 = <X className='cursor-pointer' size={15} onClick={ () => handleUpdate()} />
     
@@ -114,13 +149,13 @@ const EventList = () => {
       </Card>
 
       <Row className="match-height">
-        {events.map((event , index) => (
-          <Col lg="4" md="6" key={event.id || index}>
+        {events.map((event) => (
+          <Col lg="4" md="6" key={event.eventId}>
             <Card>
               <Button.Ripple
                 className="rbutton"
                 color="flat-danger"
-                onClick={() => handleDelete(event.id)}
+                onClick={() => handleDelete(event.eventId)}
               >
                 {" "}
                 <Trash2 />{" "}
@@ -129,7 +164,7 @@ const EventList = () => {
               <Button.Ripple
                 className="ebutton"
                 color="flat-primary"
-                onClick={() => handleUpdate(event.id)}
+                onClick={() => handleUpdate(event.eventId)}
               >
                 {" "}
                 <Edit />{" "}
@@ -143,12 +178,12 @@ const EventList = () => {
                   height="200" 
                   style={{ objectFit: 'cover' }}
                   top
-                  src={`${event.image}`}
-                  alt={`Event ${event.id}` || index}
+                  src={`${API_URL}/${event.image}`}
+                  alt={`Event ${event.eventId}`}
                 />
                 
-                <CardText style={{ maxHeight: '85px', overflow: 'hidden' }} className='mt-2' > {`${event.description}`} </CardText>
-                <CardText className='ml'>Date : {`${event.date.split(' ')[0]}`}</CardText>
+                <CardText style={{ maxHeight: '85px', overflow: 'hidden' }} className='mt-2' > {`${event.desc}`} </CardText>
+                <CardText className='ml'>Date : {`${event.date}`}</CardText>
               </CardBody>
             </Card>
           </Col>
@@ -169,7 +204,7 @@ const EventList = () => {
           close={CloseBtn2}
           tag="div"
         ></ModalHeader>
-        <UpdateEvent open={modal2} id={selectedid}  handleUpdate={handleUpdate} getAllEvents={getAllEvents} handleModal={handleModal}/>
+        <UpdateEvent open={modal2} eventId={selectedEventId}  handleUpdate={handleUpdate} />
       </Modal>
     </Fragment>
   );

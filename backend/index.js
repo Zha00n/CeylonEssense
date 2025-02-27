@@ -16,7 +16,7 @@ app.use("/public", express.static("public"));
 // MongoDB connection
 mongoose
   .connect(
-    "mongodb+srv://residuesolution2024:admin1234@cluster0.c9clk.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"
+    process.env.MONGO_URL
   )
   .then(() => console.log("Connected to MongoDB"))
   .catch((error) => console.log("Failed to connect to MongoDB", error));

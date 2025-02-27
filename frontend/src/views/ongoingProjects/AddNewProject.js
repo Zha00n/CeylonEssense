@@ -11,8 +11,30 @@ import * as React from 'react';
 import Backdrop from '@mui/material/Backdrop';
 import CircularProgress from '@mui/material/CircularProgress';
 
+// Function to refresh the access token
+const refreshAccessToken = async () => {
+  const refreshToken = localStorage.getItem('refreshToken');
+  if (!refreshToken) return false;
+
+  try {
+    const response = await axios.post(`${API_URL}/token`, {
+      refreshToken,
+    });
+
+    if (response.status === 200) {
+      localStorage.setItem('accessToken', response.data.accessToken);
+      return true;
+    }
+  } catch (error) {
+    console.error('Refresh token error:', error);
+    return false;
+  }
+  return false;
+};
+
 const AddNewProject = () => {
   const [formData, setFormData] = useState({
+    
     topic: '',
     description: '',
     image: null,
@@ -20,14 +42,13 @@ const AddNewProject = () => {
 
   const [errorMessage, setErrorMessage] = useState('');
   const [successMessage, setSuccessMessage] = useState('');
-  const [open, setOpen] = React.useState(false); // spinner
 
   const navigate = useNavigate();
 
+  const [open, setOpen] = React.useState(false); //spinner
   const handleClose = () => {
     setOpen(false);
   };
-
   const handleOpen = () => {
     setOpen(true);
   };
@@ -49,19 +70,21 @@ const AddNewProject = () => {
     
   };
 
-  
+  // submit the form data
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    
     const data = new FormData();
     data.append('topic', formData.topic);
     data.append('description', formData.description);
     data.append('image', formData.image);
-;
 
     try {
       let token = localStorage.getItem('accessToken');
       
-      const response = await axios.post(`${API_URL}/api/news/create`, data, {
+      
+      const response = await axios.post(`${API_URL}/op/add-project`, data, {
         headers: {
           'Authorization': `Bearer ${token}`, 
           'Content-Type': 'multipart/form-data'
@@ -69,21 +92,47 @@ const AddNewProject = () => {
       });
 
       if (response.status === 200) {
-        setSuccessMessage('News added successfully!');
+        setSuccessMessage('Project added successfully!');
         setErrorMessage('');
-        alertTypes.success('News added successfully!');
-        
-        
-        navigate("/news-updates");
+        alertTypes.success('Project added successfully!');
+
+        navigate("/ongoing-projects");
       }
     } catch (error) {
       setOpen(false);
       console.error(error);
 
+      
       if (error.response && error.response.status === 401) {
-        alertTypes.info('Access Denied!', 'Please log in again.');
+        const refreshed = await refreshAccessToken();
+        if (refreshed) {
+          
+          const newToken = localStorage.getItem('accessToken');
+
+          try {
+            const retryResponse = await axios.post(`${API_URL}op/add-project`, data, {
+              headers: {
+                'Authorization': `Bearer ${newToken}`,
+                'Content-Type': 'multipart/form-data'
+              }
+            });
+
+            if (retryResponse.status === 200) {
+              alertTypes.success('Poject added successfully!');
+            
+            }
+          } catch (retryError) {
+            console.error(retryError);
+            alertTypes.error('Failed to add project!');
+            
+          }
+        } else {
+          alertTypes.info('Access Denied !' , 'Please log in again.');
+          
+        }
       } else {
-        alertTypes.warning('Warning!', 'Fields cannot be empty!');
+        alertTypes.warning('Warning!' ,'Fields can not be empty!');
+        
       }
     }
   };

@@ -13,9 +13,30 @@ import Backdrop from '@mui/material/Backdrop';
 import CircularProgress from '@mui/material/CircularProgress';
 
 
+// Function to refresh the access token
+const refreshAccessToken = async () => {
+  const refreshToken = localStorage.getItem('refreshToken');
+  if (!refreshToken) return false;
+
+  try {
+    const response = await axios.post(`${API_URL}/token`, {
+      refreshToken,
+    });
+
+    if (response.status === 200) {
+      localStorage.setItem('accessToken', response.data.accessToken);
+      return true;
+    }
+  } catch (error) {
+    console.error('Refresh token error:', error);
+    return false;
+  }
+  return false;
+};
 
 const AddNewEvent = () => {
   const [formData, setFormData] = useState({
+    
     topic: '',
     desc: '',
     date: '',
@@ -25,14 +46,13 @@ const AddNewEvent = () => {
   const [errorMessage, setErrorMessage] = useState('');
   const [successMessage, setSuccessMessage] = useState('');
   const [picker, setPicker] = useState(new Date());
-  const [open, setOpen] = React.useState(false); // spinner
 
   const navigate = useNavigate();
 
+  const [open, setOpen] = React.useState(false); //spinner
   const handleClose = () => {
     setOpen(false);
   };
-
   const handleOpen = () => {
     setOpen(true);
   };
@@ -54,10 +74,13 @@ const AddNewEvent = () => {
     
   };
 
-
+  // submit the form data
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    
     const data = new FormData();
+    
     data.append('topic', formData.topic);
     data.append('desc', formData.desc);
 
@@ -67,11 +90,11 @@ const AddNewEvent = () => {
 
     data.append('image', formData.image);
 
-
     try {
       let token = localStorage.getItem('accessToken');
       
-      const response = await axios.post(`${API_URL}/api/event/create`, data, {
+      
+      const response = await axios.post(`${API_URL}/ev/add-event`, data, {
         headers: {
           'Authorization': `Bearer ${token}`, 
           'Content-Type': 'multipart/form-data'
@@ -82,18 +105,44 @@ const AddNewEvent = () => {
         setSuccessMessage('Event added successfully!');
         setErrorMessage('');
         alertTypes.success('Event added successfully!');
-        
-        
+
         navigate("/events");
       }
     } catch (error) {
       setOpen(false);
       console.error(error);
 
+      
       if (error.response && error.response.status === 401) {
-        alertTypes.info('Access Denied!', 'Please log in again.');
+        const refreshed = await refreshAccessToken();
+        if (refreshed) {
+          
+          const newToken = localStorage.getItem('accessToken');
+
+          try {
+            const retryResponse = await axios.post(`${API_URL}/ev/add-event`, data, {
+              headers: {
+                'Authorization': `Bearer ${newToken}`,
+                'Content-Type': 'multipart/form-data'
+              }
+            });
+
+            if (retryResponse.status === 200) {
+              alertTypes.success('Event added successfully!');
+            
+            }
+          } catch (retryError) {
+            console.error(retryError);
+            alertTypes.error('Failed to add event!');
+            
+          }
+        } else {
+          alertTypes.info('Access Denied !' , 'Please log in again.');
+          
+        }
       } else {
-        alertTypes.warning('Warning!', 'Fields cannot be empty!');
+        alertTypes.warning('Warning!' ,'Fields can not be empty!');
+        
       }
     }
   };

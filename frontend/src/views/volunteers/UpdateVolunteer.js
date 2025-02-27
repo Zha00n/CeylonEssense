@@ -1,43 +1,53 @@
 import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import {useNavigate, useParams } from 'react-router-dom';
 import { Card, CardHeader, CardTitle, CardBody, Row, Col, Input, Form, Button, Label } from 'reactstrap';
 import axios from 'axios';
+import apiRequest from '../../utility/apiRequest'
 import { alertTypes } from '../../utility/alertUtils';
 import { API_URL } from '../../configs/constants';
+
+import * as React from 'react';
 import Backdrop from '@mui/material/Backdrop';
 import CircularProgress from '@mui/material/CircularProgress';
 
-const UpdateVolunteer = ({ volunteerId, getAllVolunteers, handleUpdate }) => {
+
+
+
+const UpdateVolunteer = ({ volunteerId, handleModal , handleUpdate }) => {
   const [formData, setFormData] = useState({
     name: '',
     position: '',
     description: '',
     image: null,
   });
-  const [messages, setMessages] = useState({ success: '', error: '' });
-  const [loading, setLoading] = useState(false);
-  const navigate = useNavigate();
+
+  const [errorMessage, setErrorMessage] = useState('');
+  const [successMessage, setSuccessMessage] = useState('');
+
+  const [open, setOpen] = React.useState(false); //spinner
+  const handleClose = () => {
+    setOpen(false);
+  };
+  const handleOpen = () => {
+    setOpen(true);
+  };
 
   useEffect(() => {
-    if (volunteerId) fetchVolunteerData();
+    if (volunteerId) {
+      fetchVolunteerData();
+    }
   }, [volunteerId]);
 
   const fetchVolunteerData = async () => {
+    if (!volunteerId) {
+      console.error('Volunteer ID is required');
+      return; 
+    }
+    
     try {
-      const token = localStorage.getItem('accessToken');
-      if (!token) {
-        alertTypes.info('Authentication Required', 'Please log in.');
-        navigate('/login');
-        return;
-      }
-  
-      const response = await axios.get(`${API_URL}/api/volunteers/${volunteerId}`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-  
-      
-      const volunteerData = response.data.data;
-  
+      const response = await apiRequest(`${API_URL}/vol/get/${volunteerId}`,);
+      const volunteerData = response;
+
       setFormData({
         name: volunteerData.name,
         position: volunteerData.position,
@@ -46,133 +56,139 @@ const UpdateVolunteer = ({ volunteerId, getAllVolunteers, handleUpdate }) => {
       });
     } catch (error) {
       console.error(error);
-      setMessages({ error: 'Failed to fetch volunteer details!' });
-      alertTypes.error('Error', 'Failed to fetch volunteer details.');
+      setErrorMessage('Failed to fetch event details!');
     }
   };
-  
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
+    setFormData({
+      ...formData,
+      [name]: value
+    });
   };
 
   const handleFileChange = (e) => {
     const { name, files } = e.target;
-    setFormData({ ...formData, [name]: files[0] });
+    
+      setFormData({
+        ...formData,
+        [name]: files[0]
+      });
+   
   };
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
-    setLoading(true);
+  e.preventDefault();
+  const data = new FormData();
+  data.append('name', formData.name);
+  data.append('position', formData.position);
+  data.append('description', formData.description);
+  data.append('image', formData.image);
 
-    const data = new FormData();
-    data.append('id', volunteerId);
-    data.append('name', formData.name);
-    data.append('position', formData.position);
-    data.append('description', formData.description);
-    if (formData.image) data.append('image', formData.image);
+  try {
+    const response = await apiRequest(`${API_URL}/vol/update-volunteer/${volunteerId}`, {
+      method: 'PUT',
+      body: data,
+    });
 
-    try {
-      const token = localStorage.getItem('accessToken');
-      if (!token) {
-        alertTypes.info('Authentication Required', 'Please log in.');
-        navigate('/login');
-        return;
-      }
+    
+    
+    alertTypes.success('Event updated successfully!');
+    handleUpdate();
+    
 
-      await axios.post(`${API_URL}/api/volunteers/update`, data, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          'Content-Type': 'multipart/form-data',
-        },
-      });
+    
+  } catch (error) {
+    setOpen(false);
+    console.error(error);
+    alertTypes.error(error.message || 'Failed to update event!'); 
+  }
+};
 
-      alertTypes.success('Success', 'Volunteer updated successfully!');
-      handleUpdate();
-      getAllVolunteers();
-      // handleModal();
-    } catch (error) {
-      console.error(error);
-      setMessages({ ...messages, error: 'Failed to update volunteer!' });
-      alertTypes.error('Error', 'Failed to update volunteer.');
-    } finally {
-      setLoading(false);
-    }
-  };
 
   return (
     <Card>
       <CardHeader>
-        <CardTitle tag="h4">Update Volunteer</CardTitle>
+        <CardTitle tag='h4'>Update Volunteer</CardTitle>
       </CardHeader>
+
       <CardBody>
         <Form onSubmit={handleSubmit}>
           <Row>
-            <Col md="6" sm="12" className="mb-1">
-              <Label className="form-label" for="name">
+            <Col md='6' sm='12' className='mb-1'>
+              <Label className='form-label' for='name'>
                 Name
               </Label>
               <Input
-                type="text"
-                name="name"
-                id="name"
-                placeholder="Enter name..."
+                type='text'
+                name='name'
+                id='name'
+                placeholder='add name..'
                 value={formData.name}
                 onChange={handleChange}
               />
             </Col>
-            <Col md="6" sm="12" className="mb-1">
-              <Label className="form-label" for="image">
+            <Col md='6' sm='12' className='mb-1'>
+              <Label className='form-label' for='image'>
                 Image
               </Label>
-              <Input type="file" name="image" id="image" onChange={handleFileChange} />
+              <Input
+                type='file'
+                name='image'
+                id='image'
+                onChange={handleFileChange}
+              />
             </Col>
-            <Col md="6" sm="12" className="mb-1">
-              <Label className="form-label" for="position">
+
+            <Col md='6' sm='12' className='mb-1'>
+              <Label className='form-label' for='position'>
                 Position
               </Label>
               <Input
-                type="text"
-                name="position"
-                id="position"
-                placeholder="Enter position..."
+                type='text'
+                name='position'
+                id='position'
+                placeholder='add position..'
                 value={formData.position}
                 onChange={handleChange}
               />
             </Col>
-            <Col sm="12" className="mb-1">
-              <Label className="form-label" for="description">
+            <Col sm='12' className='mb-1'>
+              <Label className='form-label' for='description'>
                 Description
               </Label>
               <Input
-                type="textarea"
-                name="description"
-                id="description"
-                placeholder="Enter description..."
+                type='textarea'
+                name='description'
+                id='description'
+                placeholder='add desc..'
                 value={formData.description}
                 onChange={handleChange}
+                className=''
               />
             </Col>
-            <Col sm="12">
-              <div className="d-flex">
-                <Button color="primary" type="submit" className="me-1">
+
+            <Col sm='12'>
+              <div className='d-flex'>
+                <Button onClick={handleOpen} className='me-1' color='primary' type='submit'>
                   Submit
                 </Button>
                 <Backdrop
                   sx={(theme) => ({ color: '#fff', zIndex: theme.zIndex.drawer + 1 })}
-                  open={loading}
+                  open={open}
+                  onClick={handleClose}
                 >
                   <CircularProgress color="inherit" />
-                </Backdrop>
-                <Button outline color="secondary" type="reset">
+                </Backdrop> 
+                <Button outline color='secondary' type='reset'>
                   Reset
                 </Button>
               </div>
             </Col>
           </Row>
-          {messages.error && <p className="text-danger">{messages.error}</p>}
-          {messages.success && <p className="text-success">{messages.success}</p>}
+          {errorMessage && <p className='text-danger'>{errorMessage}</p>}
+          {successMessage && <p className='text-success'>{successMessage}</p>}
         </Form>
       </CardBody>
     </Card>

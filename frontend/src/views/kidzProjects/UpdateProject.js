@@ -22,46 +22,39 @@ const UpdateProject = ({ kProjectId, handleModal , handleUpdate }) => {
     description: '',
     date: '',
     image: null,
-    galleryImages: [],
+    galleryImages: []
   });
 
   const [errorMessage, setErrorMessage] = useState('');
   const [successMessage, setSuccessMessage] = useState('');
   const [picker, setPicker] = useState(new Date());
-  const [open, setOpen] = React.useState(false);
 
-  const handleClose = () => setOpen(false);
-  const handleOpen = () => setOpen(true);
+  const [open, setOpen] = React.useState(false); //spinner
+  const handleClose = () => {
+    setOpen(false);
+  };
+  const handleOpen = () => {
+    setOpen(true);
+  };
 
   useEffect(() => {
-    if (kProjectId) fetchProjectData();
+    if (kProjectId) {
+      fetchProjectData();
+    }
   }, [kProjectId]);
 
   const fetchProjectData = async () => {
     try {
-      const response = await axios.get(`${API_URL}/api/kids-projects/${kProjectId}`, {
-        headers: {
-          'Authorization': `Bearer ${localStorage.getItem('token')}`, 
-        },
-      });
-      const projectData = response.data.data;
-
-      
-      const galleryImages = JSON.parse(projectData.gallery_images);
-
-      
-      const parsedDate = projectData.date ? new Date(projectData.date) : new Date();
+      const response = await apiRequest(`${API_URL}/kp/get/${kProjectId}`,);
+      const projectData = response;
 
       setFormData({
         topic: projectData.topic,
         description: projectData.description,
         date: projectData.date,
-        image: projectData.image, 
-        galleryImages: galleryImages,
+        image: null, 
+        galleryImages: [],
       });
-
-      setPicker(parsedDate); 
-
     } catch (error) {
       console.error(error);
       setErrorMessage('Failed to fetch project details!');
@@ -70,71 +63,63 @@ const UpdateProject = ({ kProjectId, handleModal , handleUpdate }) => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
+    setFormData({
+      ...formData,
+      [name]: value
+    });
   };
 
   const handleFileChange = (e) => {
     const { name, files } = e.target;
     if (name === 'galleryImages') {
-      setFormData({ ...formData, galleryImages: [...files] });
+      setFormData({
+        ...formData,
+        galleryImages: [...files]
+      });
     } else {
-      setFormData({ ...formData, [name]: files[0] });
+      setFormData({
+        ...formData,
+        [name]: files[0]
+      });
     }
   };
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
+  e.preventDefault();
 
-    const data = new FormData();
+
+  const data = new FormData();
+  data.append('topic', formData.topic);
+  data.append('description', formData.description);
+
+  if (picker && picker.length > 0) {
+    data.append("date", picker[0].toLocaleDateString("en-CA"));
+  }
+
+  data.append('image', formData.image);
+  Array.from(formData.galleryImages).forEach((file) => {
+    data.append('galleryImages', file);
+  });
+
+  try {
+    const response = await apiRequest(`${API_URL}/kp/update-project/${kProjectId}`, {
+      method: 'PUT',
+      body: data,
+    });
 
     
-    data.append('id', kProjectId);
-    if (formData.topic) data.append('topic', formData.topic);
-    if (formData.description) data.append('description', formData.description);
     
-    if (picker) {
-      const formattedDate = new Date(picker).toLocaleDateString("en-CA").split('T')[0];
-      data.append('date', formattedDate);
-    }
+    alertTypes.success('Project updated successfully!');
+    handleUpdate();
+    
 
     
-    if (formData.image && formData.image instanceof File) {
-      data.append('image', formData.image);
-    }
-
-    
-    if (formData.galleryImages.length) {
-      Array.from(formData.galleryImages).forEach((file) => {
-        if (file instanceof File) {
-          data.append('galleryImages[]', file);
-        }
-      });
-    }
-
-    try {
-      let token = localStorage.getItem('accessToken');
-      
-      handleOpen();
-      const response = await axios.post(`${API_URL}/api/kids-projects/update`, data, {
-        headers: {
-          'Authorization': `Bearer ${token}`,
-          'Content-Type': 'multipart/form-data',
-        },
-      });
-
-      if (response.status === 200) {
-        alertTypes.success('Project updated successfully!');
-        handleUpdate();
-        
-      }
-    } catch (error) {
-      console.error(error);
-      alertTypes.error(error.response?.data?.message || 'Failed to update project!');
-    } finally {
-      handleClose();
-    }
-  };
-
+  } catch (error) {
+    setOpen(false);
+    console.error(error);
+    alertTypes.error(error.message || 'Failed to update project!'); 
+  }
+};
 
 
   return (

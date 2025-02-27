@@ -23,7 +23,7 @@ export default [
     id: "OngoingProjects",
     title: "News Updates",
     icon: <FileMinus size={20} />,
-    navLink: "/news-updates",
+    navLink: "/ongoing-projects",
   },
   {
     id: "events",

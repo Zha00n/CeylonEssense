@@ -5,14 +5,39 @@ import { alertTypes } from '../../utility/alertUtils';
 import { useNavigate } from 'react-router-dom';
 import { API_URL } from '../../configs/constants';
 import Flatpickr from 'react-flatpickr';
+
 import '@styles/react/libs/flatpickr/flatpickr.scss'
 
 import * as React from 'react';
 import Backdrop from '@mui/material/Backdrop';
 import CircularProgress from '@mui/material/CircularProgress';
 
+
+
+// Function to refresh the access token
+const refreshAccessToken = async () => {
+  const refreshToken = localStorage.getItem('refreshToken');
+  if (!refreshToken) return false;
+
+  try {
+    const response = await axios.post(`${API_URL}/token`, {
+      refreshToken,
+    });
+
+    if (response.status === 200) {
+      localStorage.setItem('accessToken', response.data.accessToken);
+      return true;
+    }
+  } catch (error) {
+    console.error('Refresh token error:', error);
+    return false;
+  }
+  return false;
+};
+
 const AddNewProject = () => {
   const [formData, setFormData] = useState({
+    
     topic: '',
     description: '',
     date: '',
@@ -23,14 +48,13 @@ const AddNewProject = () => {
   const [errorMessage, setErrorMessage] = useState('');
   const [successMessage, setSuccessMessage] = useState('');
   const [picker, setPicker] = useState(new Date());
-  const [open, setOpen] = React.useState(false); // spinner
 
   const navigate = useNavigate();
 
+  const [open, setOpen] = React.useState(false); //spinner
   const handleClose = () => {
     setOpen(false);
   };
-
   const handleOpen = () => {
     setOpen(true);
   };
@@ -58,9 +82,11 @@ const AddNewProject = () => {
     }
   };
 
- 
+  // submit the form data
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    
     const data = new FormData();
     data.append('topic', formData.topic);
     data.append('description', formData.description);
@@ -70,14 +96,15 @@ const AddNewProject = () => {
     }
 
     data.append('image', formData.image);
-    Array.from(formData.galleryImages).forEach((file, index) => {
-      data.append(`galleryImages[${index}]`, file)
+    Array.from(formData.galleryImages).forEach((file) => {
+      data.append(`galleryImages`, file);
     });
 
     try {
       let token = localStorage.getItem('accessToken');
       
-      const response = await axios.post(`${API_URL}/api/past-projects/create`, data, {
+      
+      const response = await axios.post(`${API_URL}/pp/add-project`, data, {
         headers: {
           'Authorization': `Bearer ${token}`, 
           'Content-Type': 'multipart/form-data'
@@ -89,17 +116,45 @@ const AddNewProject = () => {
         setErrorMessage('');
         alertTypes.success('Past-project added successfully!');
         
-        
         navigate("/past-projects");
       }
     } catch (error) {
       setOpen(false);
+
+
       console.error(error);
 
+      
       if (error.response && error.response.status === 401) {
-        alertTypes.info('Access Denied!', 'Please log in again.');
+        const refreshed = await refreshAccessToken();
+        if (refreshed) {
+          
+          const newToken = localStorage.getItem('accessToken');
+
+          try {
+            const retryResponse = await axios.post(`${API_URL}/pp/add-project`, data, {
+              headers: {
+                'Authorization': `Bearer ${newToken}`,
+                'Content-Type': 'multipart/form-data'
+              }
+            });
+
+            if (retryResponse.status === 200) {
+              alertTypes.success('Poject added successfully!');
+            
+            }
+          } catch (retryError) {
+            console.error(retryError);
+            alertTypes.error('Failed to add project!');
+            
+          }
+        } else {
+          alertTypes.info('Access Denied !' , 'Please log in again.');
+          
+        }
       } else {
-        alertTypes.warning('Warning!', 'Fields cannot be empty!');
+        alertTypes.warning('Warning!' ,'Fields can not be empty!');
+        
       }
     }
   };
@@ -121,7 +176,7 @@ const AddNewProject = () => {
                 type='text'
                 name='topic'
                 id='topic'
-                placeholder='Add project name..'
+                placeholder='add name..'
                 value={formData.topic}
                 onChange={handleChange}
               />
@@ -140,7 +195,7 @@ const AddNewProject = () => {
 
             <Col md='6' sm='12' className='mb-1'>
               <Label className='form-label' for='galleryImages'>
-                Gallery Images
+              Gallery Images
               </Label>
               <Input
                 type='file'
@@ -152,27 +207,28 @@ const AddNewProject = () => {
             </Col>
 
             <Col md='6' sm='12' className='mb-1'>
-              <Label for="hf-picker">Date</Label>
-              <Flatpickr
-                value={picker}
-                id="hf-picker"
-                className="form-control"
-                onChange={(date) => {
-                  setPicker(date);
-                  setFormData({
-                    ...formData,
-                    date: date[0].toISOString().split("T")[0],
-                  });
-                }}
-                options={{
-                  altInput: true,
-                  altFormat: "J F, Y",
-                  dateFormat: "d-m-y",
-                }}
-              />
+            <Label for="hf-picker">Date</Label>
+                    <Flatpickr
+                      value={picker}
+                      id="hf-picker"
+                      className="form-control"
+                      onChange={(date) => {
+                        setPicker(date);
+                        
+                        setFormData({
+                          ...formData,
+                          date: date[0].toISOString().split("T")[0], 
+                        });
+                      }}
+                      options={{
+                        altInput: true,
+                        altFormat: "J F, Y",
+                        dateFormat: "d-m-y",
+                      }}
+                    />
             </Col>
 
-            <Col sm='12' className='mb-1'>
+            <Col  sm='12' className='mb-1'>
               <Label className='form-label' for='description'>
                 Description
               </Label>
@@ -180,7 +236,7 @@ const AddNewProject = () => {
                 type='textarea'
                 name='description'
                 id='description'
-                placeholder='Add project description..'
+                placeholder='add description..'
                 value={formData.description}
                 onChange={handleChange}
                 style={{ minHeight: '200px' }}

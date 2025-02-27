@@ -22,20 +22,55 @@ const ProjectDetail = () => {
 
   const navigate = useNavigate();
 
-  // get project by ID
+
+  const refreshAccessToken = async () => {
+    const refreshToken = localStorage.getItem('refreshToken');
+    if (!refreshToken) return false;
+
+    try {
+      const response = await axios.post(`${API_URL}/token`, {
+        refreshToken,
+      });
+
+      if (response.status === 200) {
+        localStorage.setItem('accessToken', response.data.accessToken);
+        return true;
+      }
+    } catch (error) {
+      console.error('Refresh token error:', error);
+      return false;
+    }
+    return false;
+  };
+
   const getProjectById = async (pProjectId) => {
     try {
       let token = localStorage.getItem('accessToken');
 
-      const response = await axios.get(`${API_URL}/api/past-projects/${pProjectId}`, {
+      const response = await axios.get(`${API_URL}/pp/get/${pProjectId}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       });
       
-      setProject(response.data.data); 
+      setProject(response.data);
     } catch (err) {
-      setError('Failed to fetch project details');
+      if (err.response && err.response.status === 401) {
+        const refreshed = await refreshAccessToken();
+        if (refreshed) {
+          const newToken = localStorage.getItem('accessToken');
+          const response = await axios.get(`${API_URL}/pp/get/${pProjectId}`, {
+            headers: {
+              Authorization: `Bearer ${newToken}`,
+            },
+          });
+          setProject(response.data);
+        } else {
+          setError('Failed to refresh token. Please log in again.');
+        }
+      } else {
+        setError('Failed to fetch project details');
+      }
     } finally {
       setLoading(false);
     }
@@ -53,61 +88,59 @@ const ProjectDetail = () => {
     return <div>{error}</div>;
   }
 
-  const image = `${project.image}`;
-  const galleryImages = JSON.parse(project.gallery_images).map(image => `${image}`);
+  const image = `${API_URL}/${project.image}`;
+  const galleryImages = project.galleryImages.map(image => `${API_URL}/${image}`);
 
+  // const handleEdit = () => {
+  //   // Logic to handle edit (e.g., redirect to edit page)
+  //   console.log('Edit button clicked');
+  // };
   
+
   const handleDelete = async () => {
     const result = await alertTypes.confirmText('Are you sure?', "You won't be able to revert this!");
-  
+    
+
     if (result) {
-      try {
-        let token = localStorage.getItem('accessToken');
-  
-       
-        const response = await axios.post(
-          `${API_URL}/api/past-projects/delete`, 
-          { id: pProjectId },  
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,  
-            }
-          }
-        );
-  
-        if (response.data.status === 'success') {
-          navigate('/past-projects');
-          
-        } else {
-          alertTypes.error(response.data.msg || 'Failed to delete project!');
+        try {
+            const response = await apiRequest(`${API_URL}/pp/delete/${pProjectId}`, {
+                method: 'DELETE'
+            });
+            
+            console.log(response.message); 
+            
+            
+            
+            navigate('/past-projects'); 
+        } catch (error) {
+            console.error(error);
+            alertTypes.error('Failed to delete project!'); 
         }
-      } catch (error) {
-        console.error('Error deleting project:', error);
-        alertTypes.error('Failed to delete project!');
-      }
+        console.log('Deletion confirmed!');
     }
-  };
-  
-  
-  
+};
 
 
-  const handleModal = () => setModal(!modal);
-  const CloseBtn = <X className='cursor-pointer' size={15} onClick={handleModal} />;
 
-  const handleUpdate = () => {
-    setRefresh(prev => !prev);
-    handleModal();
-  };
+      // ** Function to handle Modal toggle
+      const handleModal = () => setModal(!modal)
+      const CloseBtn = <X className='cursor-pointer' size={15} onClick={handleModal} />
 
-  var settings = {
-    dots: false,
-    infinite: false,
-    speed: 500,
-    slidesToShow: 3,
-    slidesToScroll: 2,
-    arrow: false,
-  };
+      const handleUpdate = () => {
+        setRefresh(prev => !prev);
+        handleModal();
+
+      }
+
+
+      var settings = {
+        dots: false,
+        infinite: false,
+        speed: 500,
+        slidesToShow: 3,
+        slidesToScroll: 2,
+        arrow: false,
+      };
 
   return (
     <Card>
@@ -122,17 +155,17 @@ const ProjectDetail = () => {
                 style={{ width: "100%" }}
               />
               <div className="slider-container mt-2">
-                <Slider {...settings}>
-                  {galleryImages.map((image, index) => (
-                    <CardImg
-                      key={index}
-                      src={image}
-                      alt={`Gallery Image ${index + 1}`}
-                      style={{ width: "18%", marginRight: "5px", objectFit: 'cover' }}
-                      width="100" 
-                      height="100"
-                    />
-                  ))}
+              <Slider {...settings}>
+                {galleryImages.map((image, index) => (
+                  <CardImg
+                    key={index}
+                    src={image}
+                    alt={`Gallery Images ${index + 1}`}
+                    style={{ width: "18%", marginRight: "5px" , objectFit: 'cover', gap: "20px" }}
+                    width="100" 
+                    height="100"
+                  />
+                ))}
                 </Slider>
               </div>
             </div>
@@ -156,8 +189,22 @@ const ProjectDetail = () => {
             <CardBody style={{ position: "absolute", top: "25px" }}>
               <CardTitle tag="h4">{`Project: ${project.topic}`}</CardTitle>
               <div>
+                {/* <strong>Topic:</strong>
+                <ul>
+                  {project.topic.map((spec, index) => (
+                    <li key={index}>{spec}</li>
+                  ))}
+                </ul>
+                
+                <strong>Description:</strong>
+                <ul>
+                  {project.description.map((feature, index) => (
+                    <li key={index}>{feature}</li>
+                  ))}
+                </ul> */}
                 <strong>Description:</strong> {project.description} <br/><br/>
-                <strong>Date:</strong> {project.date}
+                <strong >Date:</strong> {project.date}
+                
               </div>
             </CardBody>
           </Card>
@@ -165,7 +212,11 @@ const ProjectDetail = () => {
       </Row>
 
       <Modal size='lg' isOpen={modal} toggle={handleModal}>
-        <ModalHeader toggle={handleModal} close={CloseBtn} tag="div"></ModalHeader>
+        <ModalHeader
+          toggle={handleModal}
+          close={CloseBtn}
+          tag="div"
+        ></ModalHeader>
         <UpdateProject pProjectId={pProjectId} handleUpdate={handleUpdate} />
       </Modal>
     </Card>

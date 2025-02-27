@@ -42,22 +42,20 @@ const Login = () => {
     e.preventDefault();
 
     try {
-      const response = await fetch(`${API_URL}/api/admin/login`, {
+      const response = await fetch(`${API_URL}/login`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ email: username, password }),
+        body: JSON.stringify({ username, password }),
       });
 
       const data = await response.json();
 
       if (response.ok) {
-        localStorage.setItem("accessToken", data.token);
-        localStorage.setItem("username", data.user.email);
-        // localStorage.setItem("accessToken", data.accessToken);
-        // localStorage.setItem("username", username);
-        // localStorage.setItem("refreshToken", data.refreshToken);
+        localStorage.setItem("accessToken", data.accessToken);
+        localStorage.setItem("refreshToken", data.refreshToken);
+        localStorage.setItem("username", username);
 
         window.location.href = "/home";
       } else {

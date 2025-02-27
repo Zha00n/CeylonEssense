@@ -56,7 +56,7 @@ const Routes = [
     element: <ProjectDetails/>
   },
   {
-    path:"/news-updates",
+    path:"/ongoing-projects",
     element: <OngoingProjects/>
   },
   {

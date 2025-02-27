@@ -1,62 +1,61 @@
 import { useState, useEffect } from 'react';
+import {useNavigate, useParams } from 'react-router-dom';
 import { Card, CardHeader, CardTitle, CardBody, Row, Col, Input, Form, Button, Label } from 'reactstrap';
 import axios from 'axios';
+import apiRequest from '../../utility/apiRequest'
+import { alertTypes } from '../../utility/alertUtils';
 import { API_URL } from '../../configs/constants';
 import Flatpickr from 'react-flatpickr';
 
-import '@styles/react/libs/flatpickr/flatpickr.scss';
+import '@styles/react/libs/flatpickr/flatpickr.scss'
 
 import * as React from 'react';
 import Backdrop from '@mui/material/Backdrop';
 import CircularProgress from '@mui/material/CircularProgress';
-import { alertTypes } from '../../utility/alertUtils';
 
-const UpdateProject = ({ pProjectId, handleModal, handleUpdate }) => {
+
+
+
+const UpdateProject = ({ pProjectId, handleModal , handleUpdate }) => {
   const [formData, setFormData] = useState({
     topic: '',
     description: '',
     date: '',
     image: null,
-    galleryImages: [],
+    galleryImages: []
   });
 
   const [errorMessage, setErrorMessage] = useState('');
   const [successMessage, setSuccessMessage] = useState('');
   const [picker, setPicker] = useState(new Date());
-  const [open, setOpen] = React.useState(false);
 
-  const handleClose = () => setOpen(false);
-  const handleOpen = () => setOpen(true);
+  const [open, setOpen] = React.useState(false); //spinner
+  const handleClose = () => {
+    setOpen(false);
+  };
+  const handleOpen = () => {
+    setOpen(true);
+  };
+
 
   useEffect(() => {
-    if (pProjectId) fetchProjectData();
+    if (pProjectId) {
+      fetchProjectData();
+    }
   }, [pProjectId]);
 
   const fetchProjectData = async () => {
     try {
-      const response = await axios.get(`${API_URL}/api/past-projects/${pProjectId}`, {
-        headers: {
-          'Authorization': `Bearer ${localStorage.getItem('token')}`, // Add token here
-        },
-      });
-      const projectData = response.data.data;
-
-      
-      const galleryImages = JSON.parse(projectData.gallery_images);
-
-      
-      const parsedDate = projectData.date ? new Date(projectData.date) : new Date();
+      const response = await apiRequest(`${API_URL}/pp/get/${pProjectId}`,);
+      const projectData = response;
 
       setFormData({
         topic: projectData.topic,
         description: projectData.description,
         date: projectData.date,
-        image: projectData.image, 
-        galleryImages: galleryImages,
+        image: null, 
+        galleryImages: [],
       });
-
-      setPicker(parsedDate); 
-
     } catch (error) {
       console.error(error);
       setErrorMessage('Failed to fetch project details!');
@@ -65,148 +64,153 @@ const UpdateProject = ({ pProjectId, handleModal, handleUpdate }) => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
+    setFormData({
+      ...formData,
+      [name]: value
+    });
   };
 
   const handleFileChange = (e) => {
     const { name, files } = e.target;
     if (name === 'galleryImages') {
-      setFormData({ ...formData, galleryImages: [...files] });
+      setFormData({
+        ...formData,
+        galleryImages: [...files]
+      });
     } else {
-      setFormData({ ...formData, [name]: files[0] });
+      setFormData({
+        ...formData,
+        [name]: files[0]
+      });
     }
   };
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
+  e.preventDefault();
 
-    const data = new FormData();
+
+  const data = new FormData();
+  data.append('topic', formData.topic);
+  data.append('description', formData.description);
+
+  if (picker && picker.length > 0) {
+    data.append("date", picker[0].toLocaleDateString("en-CA"));
+  }
+
+
+  data.append('image', formData.image);
+  Array.from(formData.galleryImages).forEach((file) => {
+    data.append('galleryImages', file);
+  });
+
+  try {
+    const response = await apiRequest(`${API_URL}/pp/update-project/${pProjectId}`, {
+      method: 'PUT',
+      body: data,
+    });
 
     
-    data.append('id', pProjectId);
-    if (formData.topic) data.append('topic', formData.topic);
-    if (formData.description) data.append('description', formData.description);
     
-    if (picker) {
-      const formattedDate = new Date(picker).toLocaleDateString("en-CA").split('T')[0];
-      data.append('date', formattedDate);
-    }
+    alertTypes.success('Project updated successfully!');
+    handleUpdate();
+    
 
     
-    if (formData.image && formData.image instanceof File) {
-      data.append('image', formData.image);
-    }
+  } catch (error) {
+    console.error(error);
+    setOpen(false);
+    alertTypes.error(error.message || 'Failed to update project!'); 
+  }
+};
 
-   
-    if (formData.galleryImages.length) {
-      Array.from(formData.galleryImages).forEach((file) => {
-        if (file instanceof File) {
-          data.append('galleryImages[]', file);
-        }
-      });
-    }
-
-    try {
-      let token = localStorage.getItem('accessToken');
-      handleOpen();
-      const response = await axios.post(`${API_URL}/api/past-projects/update`, data, {
-        headers: {
-          'Authorization': `Bearer ${token}`,
-          'Content-Type': 'multipart/form-data',
-        },
-      });
-
-      if (response.status === 200) {
-        alertTypes.success('Project updated successfully!');
-        handleUpdate();
-      }
-    } catch (error) {
-      console.error(error);
-      alertTypes.error(error.response?.data?.message || 'Failed to update project!');
-    } finally {
-      handleClose();
-    }
-  };
 
   return (
     <Card>
       <CardHeader>
-        <CardTitle tag="h4">Update Project</CardTitle>
+        <CardTitle tag='h4'>Update Project</CardTitle>
       </CardHeader>
 
       <CardBody>
         <Form onSubmit={handleSubmit}>
           <Row>
-            <Col md="6" sm="12" className="mb-1">
-              <Label className="form-label" for="topic">
+            <Col md='6' sm='12' className='mb-1'>
+              <Label className='form-label' for='topic'>
                 Project Name
               </Label>
               <Input
-                type="text"
-                name="topic"
-                id="topic"
-                placeholder="Add name.."
+                type='text'
+                name='topic'
+                id='topic'
+                placeholder='add name..'
                 value={formData.topic}
                 onChange={handleChange}
               />
             </Col>
-
-            <Col md="6" sm="12" className="mb-1">
-              <Label className="form-label" for="image">
+            <Col md='6' sm='12' className='mb-1'>
+              <Label className='form-label' for='image'>
                 Full Image
               </Label>
-              <Input type="file" name="image" id="image" onChange={handleFileChange} />
+              <Input
+                type='file'
+                name='image'
+                id='image'
+                onChange={handleFileChange}
+              />
             </Col>
 
-            <Col md="6" sm="12" className="mb-1">
-              <Label className="form-label" for="galleryImages">
-                Gallery Images
+            <Col md='6' sm='12' className='mb-1'>
+              <Label className='form-label' for='galleryImages'>
+              Gallery Images
               </Label>
               <Input
-                type="file"
-                name="galleryImages"
-                id="galleryImages"
+                type='file'
+                name='galleryImages'
+                id='galleryImages'
                 multiple
                 onChange={handleFileChange}
               />
             </Col>
 
-            <Col md="6" sm="12" className="mb-1">
-              <Label for="hf-picker">Date</Label>
-              <Flatpickr
-                value={picker}
-                id="hf-picker"
-                className="form-control"
-                onChange={(date) => {
-                  setPicker(date[0]);
-                  setFormData({ ...formData, date: date[0].toISOString().split('T')[0] });
-                }}
-                options={{
-                  altInput: true,
-                  altFormat: 'J F, Y',
-                  dateFormat: 'Y-m-d',
-                }}
-              />
+            <Col md='6' sm='12' className='mb-1'>
+            <Label for="hf-picker">Date</Label>
+                    <Flatpickr
+                      value={picker}
+                      id="hf-picker"
+                      className="form-control"
+                      onChange={(date) => {
+                        setPicker(date);
+                        
+                        setFormData({
+                          ...formData,
+                          date: date[0].toISOString().split("T")[0], 
+                        });
+                      }}
+                      options={{
+                        altInput: true,
+                        altFormat: "J F, Y",
+                        dateFormat: "d-m-y",
+                      }}
+                    />
             </Col>
 
-            <Col sm="12" className="mb-1">
-              <Label className="form-label" for="description">
+            <Col  sm='12' className='mb-1'>
+              <Label className='form-label' for='description'>
                 Description
               </Label>
               <Input
-                type="textarea"
-                name="description"
-                id="description"
-                placeholder="Add description.."
+                type='textarea'
+                name='description'
+                id='description'
+                placeholder='add description..'
                 value={formData.description}
                 onChange={handleChange}
                 style={{ minHeight: '200px' }}
               />
             </Col>
 
-            <Col sm="12">
-              <div className="d-flex">
-                <Button onClick={handleOpen} className="me-1" color="primary" type="submit">
+            <Col sm='12'>
+              <div className='d-flex'>
+                <Button onClick={handleOpen} className='me-1' color='primary' type='submit'>
                   Submit
                 </Button>
                 <Backdrop
@@ -215,15 +219,15 @@ const UpdateProject = ({ pProjectId, handleModal, handleUpdate }) => {
                   onClick={handleClose}
                 >
                   <CircularProgress color="inherit" />
-                </Backdrop>
-                <Button outline color="secondary" type="reset">
+                </Backdrop> 
+                <Button outline color='secondary' type='reset'>
                   Reset
                 </Button>
               </div>
             </Col>
           </Row>
-          {errorMessage && <p className="text-danger">{errorMessage}</p>}
-          {successMessage && <p className="text-success">{successMessage}</p>}
+          {errorMessage && <p className='text-danger'>{errorMessage}</p>}
+          {successMessage && <p className='text-success'>{successMessage}</p>}
         </Form>
       </CardBody>
     </Card>

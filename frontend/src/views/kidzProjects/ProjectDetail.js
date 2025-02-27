@@ -23,20 +23,54 @@ const ProjectDetail = () => {
   const navigate = useNavigate();
 
 
-  // get project by ID
+  const refreshAccessToken = async () => {
+    const refreshToken = localStorage.getItem('refreshToken');
+    if (!refreshToken) return false;
+
+    try {
+      const response = await axios.post(`${API_URL}/token`, {
+        refreshToken,
+      });
+
+      if (response.status === 200) {
+        localStorage.setItem('accessToken', response.data.accessToken);
+        return true;
+      }
+    } catch (error) {
+      console.error('Refresh token error:', error);
+      return false;
+    }
+    return false;
+  };
+
   const getProjectById = async (kProjectId) => {
     try {
       let token = localStorage.getItem('accessToken');
 
-      const response = await axios.get(`${API_URL}/api/kids-projects/${kProjectId}`, {
+      const response = await axios.get(`${API_URL}/kp/get/${kProjectId}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       });
       
-      setProject(response.data.data);
+      setProject(response.data);
     } catch (err) {
-      setError('Failed to fetch project details');
+      if (err.response && err.response.status === 401) {
+        const refreshed = await refreshAccessToken();
+        if (refreshed) {
+          const newToken = localStorage.getItem('accessToken');
+          const response = await axios.get(`${API_URL}/kp/get/${kProjectId}`, {
+            headers: {
+              Authorization: `Bearer ${newToken}`,
+            },
+          });
+          setProject(response.data);
+        } else {
+          setError('Failed to refresh token. Please log in again.');
+        }
+      } else {
+        setError('Failed to fetch project details');
+      }
     } finally {
       setLoading(false);
     }
@@ -54,43 +88,41 @@ const ProjectDetail = () => {
     return <div>{error}</div>;
   }
 
-  const image = `${project.image}`;
-  const galleryImages = JSON.parse(project.gallery_images).map(image => `${image}`);
+  const image = `${API_URL}/${project.image}`;
+  const galleryImages = project.galleryImages.map(image => `${API_URL}/${image}`);
 
+  // const handleEdit = () => {
+  //   // Logic to handle edit (e.g., redirect to edit page)
+  //   console.log('Edit button clicked');
+  // };
   
+
   const handleDelete = async () => {
     const result = await alertTypes.confirmText('Are you sure?', "You won't be able to revert this!");
-  
+    
+
     if (result) {
-      try {
-        let token = localStorage.getItem('accessToken');
-  
-        
-        const response = await axios.post(
-          `${API_URL}/api/kids-projects/delete`, 
-          { id: kProjectId },  
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,  
-            }
-          }
-        );
-  
-        if (response.data.status === 'success') {
-          navigate('/kidz-projects');
-          
-        } else {
-          alertTypes.error(response.data.msg || 'Failed to delete project!');
+        try {
+            const response = await apiRequest(`${API_URL}/kp/delete/${kProjectId}`, {
+                method: 'DELETE'
+            });
+            
+            console.log(response.message); 
+            
+            
+            
+            navigate('/kidz-projects'); 
+        } catch (error) {
+            console.error(error);
+            alertTypes.error('Failed to delete project!'); 
         }
-      } catch (error) {
-        console.error('Error deleting project:', error);
-        alertTypes.error('Failed to delete project!');
-      }
+        console.log('Deletion confirmed!');
     }
-  };
+};
 
 
-      
+
+      // ** Function to handle Modal toggle
       const handleModal = () => setModal(!modal)
       const CloseBtn = <X className='cursor-pointer' size={15} onClick={handleModal} />
 

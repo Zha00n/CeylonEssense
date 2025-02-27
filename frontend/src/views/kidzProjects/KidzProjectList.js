@@ -15,14 +15,59 @@ const ProjectList = () => {
   const [error, setError] = useState('');
   const [modal, setModal] = useState(false);
 
+  const refreshAccessToken = async () => {
+    const refreshToken = localStorage.getItem('refreshToken');
+    if (!refreshToken) return false; 
+
+    try {
+      const response = await axios.post(`${API_URL}/token`, {
+        refreshToken,
+      });
+
+      if (response.status === 200) {
+        localStorage.setItem('accessToken', response.data.accessToken);
+        return true; 
+      }
+    } catch (error) {
+      console.error('Refresh token error:', error);
+      return false; 
+    }
+    return false;
+  };
+
   const getAllProjects = async () => {
     try {
-      const response = await axios.get(`${API_URL}/api/kids-projects/all`);
+      let token = localStorage.getItem('accessToken');
+
+      const response = await axios.get(`${API_URL}/kp/getAll`, {
+        headers: {
+          Authorization: `Bearer ${token}`, 
+        },
+      });
       
-      setProjects(response.data.data);
+      setProjects(response.data.slice().reverse());
+      
     } catch (err) {
-      console.error('Error fetching projects:', err);
-      alertTypes.error('Failed to fetch projects!');
+      if (err.response && err.response.status === 401) {
+       
+        const refreshed = await refreshAccessToken();
+        if (refreshed) {
+          
+          const newToken = localStorage.getItem('accessToken');
+          const response = await axios.get(`${API_URL}/kp/getAll`, {
+            headers: {
+              Authorization: `Bearer ${newToken}`,
+            },
+          });
+          setProjects(response.data.slice().reverse());
+        } else {
+          // setError('Failed to refresh token. Please log in again.');
+          alertTypes.warning( 'Access Denied !' , 'Please log in.');
+        }
+      } else {
+        // setError('Failed to fetch projects');
+        alertTypes.error('Failed to fetch projects!')
+      }
     } finally {
       setLoading(false);
     }
@@ -41,7 +86,8 @@ const ProjectList = () => {
   }
 
 
-    
+
+    // ** Function to handle Modal toggle
     const handleModal = () => setModal(!modal)
 
     const CloseBtn = <X className='cursor-pointer' size={15} onClick={handleModal} />
@@ -64,36 +110,26 @@ const ProjectList = () => {
     </Card>
     
     <Row className='match-height'>
-  {projects.map((project, index) => (
-    <Col lg='4' md='6' key={project.id || index}>
-      <Card>
-        <CardImg
-          width="200"
-          height="200"
-          style={{ objectFit: 'cover' }}
-          top
-          src={`${project.image}`}
-          alt={`Project ${project.id || index}`}
-        />
-        <CardBody>
-          <CardTitle style={{ maxHeight: '100px', overflow: 'hidden' }} tag='h4'>
-            {project.topic}
-          </CardTitle>
-          <CardText style={{ maxHeight: '85px', overflow: 'hidden' }}>
-            {project.description}
-          </CardText>
-          <CardText className='absolute'>Date: {project.date}</CardText>
-          <Link to={`/kidz-projects/${project.id}`}>
-            <Button color='primary' outline>
-              View Details
-            </Button>
-          </Link>
-        </CardBody>
-      </Card>
-    </Col>
-  ))}
-</Row>
-
+      {projects.map((project) => (
+        <Col lg='4' md='6' key={project.kProjectId}>
+          <Card>
+            <CardImg width="200" height="200" style={{ objectFit: 'cover' }} top src={`${API_URL}/${project.image}`} alt={`Project ${project.kProjectId}`} />
+            <CardBody>
+              <CardTitle style={{ maxHeight: '100px', overflow: 'hidden' }} tag='h4'>{`${project.topic}`}</CardTitle>
+              <CardText style={{ maxHeight: '85px', overflow: 'hidden' }}>
+                {project.description}
+              </CardText>
+              <CardText className='absolute'>Date : {`${project.date}`}</CardText>
+              <Link to={`/kidz-projects/${project.kProjectId}`}>
+                <Button color='primary' outline>
+                  View Details
+                </Button>
+              </Link>
+            </CardBody>
+          </Card>
+        </Col>
+      ))}
+    </Row>
     <Modal size='lg' isOpen={modal} toggle={handleModal}>
     <ModalHeader toggle={handleModal} close={CloseBtn} tag='div'>
       </ModalHeader>

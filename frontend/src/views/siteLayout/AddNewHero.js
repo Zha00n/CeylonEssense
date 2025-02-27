@@ -9,8 +9,31 @@ import * as React from 'react';
 import Backdrop from '@mui/material/Backdrop';
 import CircularProgress from '@mui/material/CircularProgress';
 
+
+// Function to refresh the access token
+const refreshAccessToken = async () => {
+  const refreshToken = localStorage.getItem('refreshToken');
+  if (!refreshToken) return false;
+
+  try {
+    const response = await axios.post(`${API_URL}/token`, {
+      refreshToken,
+    });
+
+    if (response.status === 200) {
+      localStorage.setItem('accessToken', response.data.accessToken);
+      return true;
+    }
+  } catch (error) {
+    console.error('Refresh token error:', error);
+    return false;
+  }
+  return false;
+};
+
 const AddNewHero = () => {
   const [formData, setFormData] = useState({
+    
     image: null,
   });
 
@@ -37,23 +60,26 @@ const AddNewHero = () => {
 
   const handleFileChange = (e) => {
     const { name, files } = e.target;
-    setFormData({
-      ...formData,
-      [name]: files[0]
-    });
+      setFormData({
+        ...formData,
+        [name]: files[0]
+      });
+    
   };
 
- 
+  // submit the form data
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    
     const data = new FormData();
     data.append('image', formData.image);
 
     try {
       let token = localStorage.getItem('accessToken');
-
-      const response = await axios.post(`${API_URL}/api/hero-image/create`, data, {
+      
+      
+      const response = await axios.post(`${API_URL}/hr/add-hero`, data, {
         headers: {
           'Authorization': `Bearer ${token}`, 
           'Content-Type': 'multipart/form-data'
@@ -73,11 +99,35 @@ const AddNewHero = () => {
 
       
       if (error.response && error.response.status === 401) {
-        alertTypes.info('Access Denied!', 'Please log in again.');
-        
-        navigate("/login");
+        const refreshed = await refreshAccessToken();
+        if (refreshed) {
+          
+          const newToken = localStorage.getItem('accessToken');
+
+          try {
+            const retryResponse = await axios.post(`${API_URL}/hr/add-hero`, data, {
+              headers: {
+                'Authorization': `Bearer ${newToken}`,
+                'Content-Type': 'multipart/form-data'
+              }
+            });
+
+            if (retryResponse.status === 200) {
+              alertTypes.success('Heoro image added successfully!');
+            
+            }
+          } catch (retryError) {
+            console.error(retryError);
+            alertTypes.error('Failed to add hero image!');
+            
+          }
+        } else {
+          alertTypes.info('Access Denied !' , 'Please log in again.');
+          
+        }
       } else {
-        alertTypes.warning('Warning!', 'Failed to add hero image or fields are empty!');
+        alertTypes.warning('Warning!' ,'Fields can not be empty!');
+        
       }
     }
   };
@@ -91,6 +141,19 @@ const AddNewHero = () => {
       <CardBody>
         <Form onSubmit={handleSubmit}>
           <Row>
+            {/* <Col md='6' sm='12' className='mb-1'>
+              <Label className='form-label' for='topic'>
+                Event Name
+              </Label>
+              <Input
+                type='text'
+                name='topic'
+                id='topic'
+                placeholder='add name..'
+                value={formData.topic}
+                onChange={handleChange}
+              />
+            </Col> */}
             <Col md='6' sm='12' className='mb-1'>
               <Label className='form-label' for='image'>
                 Image
@@ -102,6 +165,19 @@ const AddNewHero = () => {
                 onChange={handleFileChange}
               />
             </Col>
+            {/* <Col md='6' sm='12' className='mb-1'>
+              <Label className='form-label' for='description'>
+                Description
+              </Label>
+              <Input
+                type='text'
+                name='description'
+                id='description'
+                placeholder='add description..'
+                value={formData.description}
+                onChange={handleChange}
+              />
+            </Col> */}
 
             <Col sm='12'>
               <div className='d-flex'>
