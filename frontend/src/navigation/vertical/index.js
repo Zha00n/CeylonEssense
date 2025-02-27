@@ -9,13 +9,13 @@ export default [
   },
   {
     id: "PastProjects",
-    title: "Past Projects",
+    title: "Products",
     icon: <FileText size={20} />,
     navLink: "/past-projects",
   },
   {
     id: "KidzProjects",
-    title: "Kidz Projects",
+    title: "Resources",
     icon: <Book size={20} />,
     navLink: "/kidz-projects",
   },

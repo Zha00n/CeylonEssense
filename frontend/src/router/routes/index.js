@@ -52,7 +52,7 @@ const Routes = [
     element: <PastProjects/>
   },
   {
-    path:"/projects/:pProjectId",
+    path:"/products/:productId",
     element: <ProjectDetails/>
   },
   {

@@ -13,8 +13,8 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 
 const ProjectDetail = () => {
-  const { pProjectId } = useParams(); 
-  const [project, setProject] = useState(null);
+  const { productId } = useParams(); 
+  const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [modal, setModal] = useState(false);
@@ -43,33 +43,33 @@ const ProjectDetail = () => {
     return false;
   };
 
-  const getProjectById = async (pProjectId) => {
+  const getProjectById = async (productId) => {
     try {
       let token = localStorage.getItem('accessToken');
 
-      const response = await axios.get(`${API_URL}/pp/get/${pProjectId}`, {
+      const response = await axios.get(`${API_URL}/p/get/${productId}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       });
       
-      setProject(response.data);
+      setProduct(response.data);
     } catch (err) {
       if (err.response && err.response.status === 401) {
         const refreshed = await refreshAccessToken();
         if (refreshed) {
           const newToken = localStorage.getItem('accessToken');
-          const response = await axios.get(`${API_URL}/pp/get/${pProjectId}`, {
+          const response = await axios.get(`${API_URL}/p/get/${productId}`, {
             headers: {
               Authorization: `Bearer ${newToken}`,
             },
           });
-          setProject(response.data);
+          setProduct(response.data);
         } else {
           setError('Failed to refresh token. Please log in again.');
         }
       } else {
-        setError('Failed to fetch project details');
+        setError('Failed to fetch product details');
       }
     } finally {
       setLoading(false);
@@ -77,19 +77,19 @@ const ProjectDetail = () => {
   };
 
   useEffect(() => {
-    getProjectById(pProjectId); 
-  }, [pProjectId, refresh]);
+    getProjectById(productId); 
+  }, [productId, refresh]);
 
   if (loading) {
-    return <div>Loading project details...</div>;
+    return <div>Loading product details...</div>;
   }
 
   if (error) {
     return <div>{error}</div>;
   }
 
-  const image = `${API_URL}/${project.image}`;
-  const galleryImages = project.galleryImages.map(image => `${API_URL}/${image}`);
+  const image = `${API_URL}/${product.image}`;
+  const certiImages = product.certiImages.map(image => `${API_URL}/${image}`);
 
   // const handleEdit = () => {
   //   // Logic to handle edit (e.g., redirect to edit page)
@@ -103,7 +103,7 @@ const ProjectDetail = () => {
 
     if (result) {
         try {
-            const response = await apiRequest(`${API_URL}/pp/delete/${pProjectId}`, {
+            const response = await apiRequest(`${API_URL}/p/delete/${productId}`, {
                 method: 'DELETE'
             });
             
@@ -114,7 +114,7 @@ const ProjectDetail = () => {
             navigate('/past-projects'); 
         } catch (error) {
             console.error(error);
-            alertTypes.error('Failed to delete project!'); 
+            alertTypes.error('Failed to delete product!'); 
         }
         console.log('Deletion confirmed!');
     }
@@ -151,19 +151,22 @@ const ProjectDetail = () => {
               <CardImg
                 top
                 src={image}
-                alt={`Project ${project.pProjectId}`}
+                alt={`Project ${product.productId}`}
                 style={{ width: "100%" }}
               />
+
+              
               <div className="slider-container mt-2">
+              <strong style={{ fontSize:'20px'}}>Certifications:</strong> 
               <Slider {...settings}>
-                {galleryImages.map((image, index) => (
+                {certiImages.map((image, index) => (
                   <CardImg
                     key={index}
                     src={image}
                     alt={`Gallery Images ${index + 1}`}
-                    style={{ width: "18%", marginRight: "5px" , objectFit: 'cover', gap: "20px" }}
-                    width="100" 
-                    height="100"
+                    style={{ width: "100%", marginRight: "5px" , objectFit: 'cover',}}
+                    width="80" 
+                    height="80"
                   />
                 ))}
                 </Slider>
@@ -187,23 +190,31 @@ const ProjectDetail = () => {
               </Button.Ripple>
             </div>
             <CardBody style={{ position: "absolute", top: "25px" }}>
-              <CardTitle tag="h4">{`Project: ${project.topic}`}</CardTitle>
+              <CardTitle style={{ fontSize:'2rem' }} tag="h4">{`${product.productId}: ${product.title}`}</CardTitle>
               <div>
                 {/* <strong>Topic:</strong>
                 <ul>
-                  {project.topic.map((spec, index) => (
+                  {product.title.map((spec, index) => (
                     <li key={index}>{spec}</li>
                   ))}
                 </ul>
                 
                 <strong>Description:</strong>
                 <ul>
-                  {project.description.map((feature, index) => (
+                  {product.description.map((feature, index) => (
                     <li key={index}>{feature}</li>
                   ))}
                 </ul> */}
-                <strong>Description:</strong> {project.description} <br/><br/>
-                <strong >Date:</strong> {project.date}
+                <strong>Description:</strong> {product.description} <br/><br/>
+                <strong >Category:</strong> {product.category} <br/><br/>
+
+
+                <div style={{ marginTop:'20px' }}>
+                <strong style={{ fontSize:'1.5rem',}}>Seller's Information</strong><br/><br/>
+                <strong >Seller Name:</strong> {product.sellerName} <br/><br/>
+                <strong >Contact Number:</strong> {product.sellerCall} <br/><br/>
+                <strong >Whatsapp:</strong> {product.sellerWa} <br/><br/>
+                </div>
                 
               </div>
             </CardBody>
@@ -217,7 +228,7 @@ const ProjectDetail = () => {
           close={CloseBtn}
           tag="div"
         ></ModalHeader>
-        <UpdateProject pProjectId={pProjectId} handleUpdate={handleUpdate} />
+        <UpdateProject productId={productId} handleUpdate={handleUpdate} />
       </Modal>
     </Card>
   );

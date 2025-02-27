@@ -1,64 +1,86 @@
-import { useState, useEffect } from 'react';
-import {useNavigate, useParams } from 'react-router-dom';
-import { Card, CardHeader, CardTitle, CardBody, Row, Col, Input, Form, Button, Label } from 'reactstrap';
-import axios from 'axios';
-import apiRequest from '../../utility/apiRequest'
-import { alertTypes } from '../../utility/alertUtils';
-import { API_URL } from '../../configs/constants';
-import Flatpickr from 'react-flatpickr';
+import { useState, useEffect } from "react";
+import { useNavigate, useParams } from "react-router-dom";
+import {
+  Card,
+  CardHeader,
+  CardTitle,
+  CardBody,
+  Row,
+  Col,
+  Input,
+  Form,
+  Button,
+  Label,
+} from "reactstrap";
+import axios from "axios";
+import { alertTypes } from "../../utility/alertUtils";
+import { API_URL } from "../../configs/constants";
+import Select from "react-select";
+import Backdrop from "@mui/material/Backdrop";
+import CircularProgress from "@mui/material/CircularProgress";
 
-import '@styles/react/libs/flatpickr/flatpickr.scss'
+const refreshAccessToken = async () => {
+  const refreshToken = localStorage.getItem("refreshToken");
+  if (!refreshToken) return false;
 
-import * as React from 'react';
-import Backdrop from '@mui/material/Backdrop';
-import CircularProgress from '@mui/material/CircularProgress';
+  try {
+    const response = await axios.post(`${API_URL}/token`, {
+      refreshToken,
+    });
 
+    if (response.status === 200) {
+      localStorage.setItem("accessToken", response.data.accessToken);
+      return true;
+    }
+  } catch (error) {
+    console.error("Refresh token error:", error);
+    return false;
+  }
+  return false;
+};
 
-
-
-const UpdateProject = ({ pProjectId, handleModal , handleUpdate }) => {
+const UpdateProduct = () => {
   const [formData, setFormData] = useState({
-    topic: '',
-    description: '',
-    date: '',
+    title: "",
+    category: "",
+    description: "",
     image: null,
-    galleryImages: []
+    certiImages: [],
+    sellerName: "",
+    sellerCall: "",
+    sellerWa: "",
   });
 
-  const [errorMessage, setErrorMessage] = useState('');
-  const [successMessage, setSuccessMessage] = useState('');
-  const [picker, setPicker] = useState(new Date());
-
-  const [open, setOpen] = React.useState(false); //spinner
-  const handleClose = () => {
-    setOpen(false);
-  };
-  const handleOpen = () => {
-    setOpen(true);
-  };
-
+  const [errorMessage, setErrorMessage] = useState("");
+  const [successMessage, setSuccessMessage] = useState("");
+  const [open, setOpen] = useState(false);
+  const navigate = useNavigate();
+  const { productId } = useParams();
 
   useEffect(() => {
-    if (pProjectId) {
-      fetchProjectData();
+    if (productId) {
+      fetchProductData();
     }
-  }, [pProjectId]);
+  }, [productId]);
 
-  const fetchProjectData = async () => {
+  const fetchProductData = async () => {
     try {
-      const response = await apiRequest(`${API_URL}/pp/get/${pProjectId}`,);
-      const projectData = response;
+      const response = await axios.get(`${API_URL}/p/get/${productId}`);
+      const product = response.data;
 
       setFormData({
-        topic: projectData.topic,
-        description: projectData.description,
-        date: projectData.date,
-        image: null, 
-        galleryImages: [],
+        title: product.title,
+        category: product.category,
+        description: product.description,
+        image: null, // Keep null to allow file upload
+        certiImages: [],
+        sellerName: product.sellerName,
+        sellerCall: product.sellerCall,
+        sellerWa: product.sellerWa,
       });
     } catch (error) {
       console.error(error);
-      setErrorMessage('Failed to fetch project details!');
+      setErrorMessage("Failed to fetch product details!");
     }
   };
 
@@ -66,172 +88,257 @@ const UpdateProject = ({ pProjectId, handleModal , handleUpdate }) => {
     const { name, value } = e.target;
     setFormData({
       ...formData,
-      [name]: value
+      [name]: value,
     });
   };
 
   const handleFileChange = (e) => {
     const { name, files } = e.target;
-    if (name === 'galleryImages') {
+    if (name === "certiImages") {
       setFormData({
         ...formData,
-        galleryImages: [...files]
+        certiImages: [...files],
       });
     } else {
       setFormData({
         ...formData,
-        [name]: files[0]
+        [name]: files[0],
       });
     }
   };
 
   const handleSubmit = async (e) => {
-  e.preventDefault();
+    e.preventDefault();
+    const data = new FormData();
 
+    data.append("title", formData.title);
+    data.append("category", formData.category);
+    data.append("description", formData.description);
+    data.append("sellerName", formData.sellerName);
+    data.append("sellerCall", formData.sellerCall);
+    data.append("sellerWa", formData.sellerWa);
 
-  const data = new FormData();
-  data.append('topic', formData.topic);
-  data.append('description', formData.description);
-
-  if (picker && picker.length > 0) {
-    data.append("date", picker[0].toLocaleDateString("en-CA"));
-  }
-
-
-  data.append('image', formData.image);
-  Array.from(formData.galleryImages).forEach((file) => {
-    data.append('galleryImages', file);
-  });
-
-  try {
-    const response = await apiRequest(`${API_URL}/pp/update-project/${pProjectId}`, {
-      method: 'PUT',
-      body: data,
+    if (formData.image) data.append("image", formData.image);
+    Array.from(formData.certiImages).forEach((file) => {
+      data.append("certiImages", file);
     });
 
-    
-    
-    alertTypes.success('Project updated successfully!');
-    handleUpdate();
-    
+    try {
+      let token = localStorage.getItem("accessToken");
 
-    
-  } catch (error) {
-    console.error(error);
-    setOpen(false);
-    alertTypes.error(error.message || 'Failed to update project!'); 
-  }
-};
+      const response = await axios.put(`${API_URL}/p/update-product/${productId}`, data, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "multipart/form-data",
+        },
+      });
 
+      if (response.status === 200) {
+        setSuccessMessage("Product updated successfully!");
+        setErrorMessage("");
+        alertTypes.success("Product updated successfully!");
+
+        navigate("/past-projects");
+      }
+    } catch (error) {
+      setOpen(false);
+
+      console.error(error);
+
+      if (error.response && error.response.status === 401) {
+        const refreshed = await refreshAccessToken();
+        if (refreshed) {
+          const newToken = localStorage.getItem("accessToken");
+
+          try {
+            const retryResponse = await axios.put(
+              `${API_URL}/p/update-product/${productId}`,
+              data,
+              {
+                headers: {
+                  Authorization: `Bearer ${newToken}`,
+                  "Content-Type": "multipart/form-data",
+                },
+              }
+            );
+
+            if (retryResponse.status === 200) {
+              alertTypes.success("Product updated successfully!");
+            }
+          } catch (retryError) {
+            console.error(retryError);
+            alertTypes.error("Failed to update product!");
+          }
+        } else {
+          alertTypes.info("Access Denied!", "Please log in again.");
+        }
+      } else {
+        alertTypes.warning("Warning!", "Fields cannot be empty!");
+      }
+    }
+  };
 
   return (
     <Card>
       <CardHeader>
-        <CardTitle tag='h4'>Update Project</CardTitle>
+        <CardTitle tag="h4">Update Product</CardTitle>
       </CardHeader>
 
       <CardBody>
         <Form onSubmit={handleSubmit}>
           <Row>
-            <Col md='6' sm='12' className='mb-1'>
-              <Label className='form-label' for='topic'>
-                Project Name
+            <Col md="6" sm="12" className="mb-1">
+              <Label className="form-label" for="title">
+                Product Title
               </Label>
               <Input
-                type='text'
-                name='topic'
-                id='topic'
-                placeholder='add name..'
-                value={formData.topic}
+                type="text"
+                name="title"
+                id="title"
+                placeholder="Add title..."
+                value={formData.title}
                 onChange={handleChange}
               />
             </Col>
-            <Col md='6' sm='12' className='mb-1'>
-              <Label className='form-label' for='image'>
-                Full Image
+
+            <Col md="6" className="mb-2">
+              <Label className="form-label" for="category">
+                Category
+              </Label>
+              <Select
+                id="category"
+                isClearable={false}
+                name="category"
+                options={[
+                  { value: "Spice", label: "Spice" },
+                  { value: "Herb", label: "Herb" },
+                  { value: "Handcraft", label: "Handcraft" },
+                  { value: "Food", label: "Food & Beverage" },
+                ]}
+                className="react-select"
+                classNamePrefix="select"
+                value={{ value: formData.category, label: formData.category }}
+                onChange={(selectedOption) =>
+                  setFormData({
+                    ...formData,
+                    category: selectedOption ? selectedOption.value : "",
+                  })
+                }
+              />
+            </Col>
+
+            <Col md="6" sm="12" className="mb-1">
+              <Label className="form-label" for="image">
+                Product Image
               </Label>
               <Input
-                type='file'
-                name='image'
-                id='image'
+                type="file"
+                name="image"
+                id="image"
                 onChange={handleFileChange}
               />
             </Col>
 
-            <Col md='6' sm='12' className='mb-1'>
-              <Label className='form-label' for='galleryImages'>
-              Gallery Images
+            <Col md="6" sm="12" className="mb-1">
+              <Label className="form-label" for="certiImages">
+                Certifications Images
               </Label>
               <Input
-                type='file'
-                name='galleryImages'
-                id='galleryImages'
+                type="file"
+                name="certiImages"
+                id="certiImages"
                 multiple
                 onChange={handleFileChange}
               />
             </Col>
 
-            <Col md='6' sm='12' className='mb-1'>
-            <Label for="hf-picker">Date</Label>
-                    <Flatpickr
-                      value={picker}
-                      id="hf-picker"
-                      className="form-control"
-                      onChange={(date) => {
-                        setPicker(date);
-                        
-                        setFormData({
-                          ...formData,
-                          date: date[0].toISOString().split("T")[0], 
-                        });
-                      }}
-                      options={{
-                        altInput: true,
-                        altFormat: "J F, Y",
-                        dateFormat: "d-m-y",
-                      }}
-                    />
-            </Col>
-
-            <Col  sm='12' className='mb-1'>
-              <Label className='form-label' for='description'>
+            <Col sm="12" className="mb-1">
+              <Label className="form-label" for="description">
                 Description
               </Label>
               <Input
-                type='textarea'
-                name='description'
-                id='description'
-                placeholder='add description..'
+                type="textarea"
+                name="description"
+                id="description"
+                placeholder="Add description..."
                 value={formData.description}
                 onChange={handleChange}
-                style={{ minHeight: '200px' }}
+                style={{ minHeight: "100px" }}
               />
             </Col>
 
-            <Col sm='12'>
-              <div className='d-flex'>
-                <Button onClick={handleOpen} className='me-1' color='primary' type='submit'>
+            <Col md="6" sm="12" className="mb-1">
+              <Label className="form-label" for="sellerName">
+                Seller Name
+              </Label>
+              <Input
+                type="text"
+                name="sellerName"
+                id="sellerName"
+                placeholder="Add name..."
+                value={formData.sellerName}
+                onChange={handleChange}
+              />
+            </Col>
+
+            <Col md="6" sm="12" className="mb-1">
+              <Label className="form-label" for="sellerCall">
+                Contact Number
+              </Label>
+              <Input
+                type="text"
+                name="sellerCall"
+                id="sellerCall"
+                placeholder="Add contact number..."
+                value={formData.sellerCall}
+                onChange={handleChange}
+              />
+            </Col>
+
+            <Col md="6" sm="12" className="mb-1">
+              <Label className="form-label" for="sellerWa">
+                WhatsApp Number
+              </Label>
+              <Input
+                type="text"
+                name="sellerWa"
+                id="sellerWa"
+                placeholder="Add WhatsApp number..."
+                value={formData.sellerWa}
+                onChange={handleChange}
+              />
+            </Col>
+
+            <Col sm="12">
+              <div className="d-flex">
+                <Button
+                  onClick={() => setOpen(true)}
+                  className="me-1"
+                  color="primary"
+                  type="submit"
+                >
                   Submit
                 </Button>
                 <Backdrop
-                  sx={(theme) => ({ color: '#fff', zIndex: theme.zIndex.drawer + 1 })}
+                  sx={(theme) => ({ color: "#fff", zIndex: theme.zIndex.drawer + 1 })}
                   open={open}
-                  onClick={handleClose}
+                  onClick={() => setOpen(false)}
                 >
                   <CircularProgress color="inherit" />
-                </Backdrop> 
-                <Button outline color='secondary' type='reset'>
+                </Backdrop>
+
+                <Button outline color="secondary" type="reset">
                   Reset
                 </Button>
               </div>
             </Col>
           </Row>
-          {errorMessage && <p className='text-danger'>{errorMessage}</p>}
-          {successMessage && <p className='text-success'>{successMessage}</p>}
+          {errorMessage && <p className="text-danger">{errorMessage}</p>}
+          {successMessage && <p className="text-success">{successMessage}</p>}
         </Form>
       </CardBody>
     </Card>
   );
 };
 
-export default UpdateProject;
+export default UpdateProduct;
