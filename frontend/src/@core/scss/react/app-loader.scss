@@ -34,7 +34,7 @@
       height: 55px;
       border-radius: 50%;
       border: 3px solid transparent;
-      border-left: 3px solid rgb(255, 156, 156);
+      border-left: 3px solid #1D9325;
       -webkit-box-sizing: border-box;
       box-sizing: border-box;
     }
@@ -57,11 +57,10 @@
     }
   }
 }
-// .fallback-logo {
-//   position: absolute;
-//   left: calc(50% - 45px);
-//   top: 40%;
-// }
+.fallback-logo {
+    height: '50px';
+    width: '50px';
+}
 
 @keyframes rotate {
   0% {

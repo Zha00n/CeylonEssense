@@ -27,14 +27,10 @@ const DefaultRoute = "/login"
 
 const Home = lazy(() => import("../../views/Home"))
 const Login = lazy(() => import("../../views/Login"))
-const PastProjects = lazy(() => import("../../views/pastProjects/PastProjectList"))
-const ProjectDetails = lazy(() => import("../../views/pastProjects/ProjectDetail"))
-const OngoingProjects = lazy(() =>import("../../views/ongoingProjects/OngoingProjectList"))
-const Events = lazy(() => import("../../views/events/EventList"))
-const Heros = lazy(() => import('../../views/siteLayout/Hero'))
-const KidzProjects = lazy(() => import("../../views/kidzProjects/KidzProjectList"))
-const KidzProjectDetails = lazy(() => import("../../views/kidzProjects/ProjectDetail"))
-const Volunteers = lazy(() => import("../../views/volunteers/VolunteerList"))
+const Products = lazy(() => import("../../views/products/ProductList"))
+const ProductDetails = lazy(() => import("../../views/products/ProductDetail"))
+const Resources = lazy(() => import("../../views/resources/ResourceList"))
+const ResourceDetails = lazy(() => import("../../views/resources/ResourceDetail"))
 
 // ** Merge Routes
 const Routes = [
@@ -48,36 +44,20 @@ const Routes = [
     element: <Home />
   },
   {
-    path:"/past-projects",
-    element: <PastProjects/>
+    path:"/products",
+    element: <Products/>
   },
   {
     path:"/products/:productId",
-    element: <ProjectDetails/>
+    element: <ProductDetails/>
   },
   {
-    path:"/ongoing-projects",
-    element: <OngoingProjects/>
+    path:"/resources",
+    element: <Resources/>
   },
   {
-    path:"/events",
-    element: <Events/>
-  },
-  {
-    path:"/heros",
-    element: <Heros/>
-  },
-  {
-    path:"/kidz-projects",
-    element: <KidzProjects/>
-  },
-  {
-    path:"/kidz-projects/:kProjectId",
-    element: <KidzProjectDetails/>
-  },
-  {
-    path:"/volunteers",
-    element: <Volunteers/>
+    path:"/resources/:resourceId",
+    element: <ResourceDetails/>
   },
   {
     path: "/login",

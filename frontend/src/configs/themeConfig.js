@@ -1,12 +1,12 @@
 // Logo Import
-import logo from "@src/assets/images/logo/hope.png";
+import logo from "@src/assets/images/logo/ce.png";
 
 // You can customize the template with the help of this file
 
 //Template config options
 const themeConfig = {
   app: {
-    appName: "HOPE",
+    appName: "Ceylon Essence",
     appLogoImage: logo,
   },
   layout: {

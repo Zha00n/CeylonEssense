@@ -7,16 +7,18 @@ import {
   CardLink,
 } from "reactstrap";
 
-import logo from "../assets/images/logo/hope.png"
+import logo from "../assets/images/logo/ce.png"
 
 const Home = () => {
   return (
-    <div className="imageHope">
-      <div className="overlayHope">
-        
-        <div className="textHope">
-          <img src={logo} alt="logo" className="logoz"/>
-          <h1 className="tcolor">HOPE</h1>
+    <div className="imageEssence">
+      <video src="/././src/assets/videos/about.mp4" autoPlay ></video>
+      <div className="overlayH">
+      
+        <div className="textH">
+          
+        <img style={{  height:'150px', width:'150px' }} src={logo} alt="ceylon essence" />
+          <h1 className="tcolor">Ceylon Essence</h1>
         </div>
 
         

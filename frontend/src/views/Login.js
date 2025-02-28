@@ -2,7 +2,7 @@
 import React, { useState } from "react";
 import { useSkin } from "@hooks/useSkin";
 import { Link } from "react-router-dom";
-import vik from "../assets/images/logo/hope1.png";
+import vik from "../assets/images/logo/ce.png";
 
 // ** Icons Imports
 import { Facebook, Twitter, Mail, GitHub, PhoneCall } from "react-feather";
@@ -23,8 +23,8 @@ import {
 } from "reactstrap";
 
 // ** Illustrations Imports
-import illustrationsLight from "@src/assets/images/pages/hopevector.png";
-import illustrationsDark from "@src/assets/images/pages/dark.png";
+import illustrationsLight from "@src/assets/images/pages/herb.png";
+import illustrationsDark from "@src/assets/images/pages/herb.png";
 
 // ** Styles
 import "@styles/react/pages/page-authentication.scss";
@@ -71,8 +71,10 @@ const Login = () => {
     <div className="auth-wrapper auth-cover">
       <Row className="m-0 auth-inner">
         <Link className="brand-logo" to="/" onClick={(e) => e.preventDefault()}>
-          <img src={vik} className="viklogo" />
+          <img src={vik} className="viklogo" style={{ height:'80px', width:'80px' }}/>
+          <h1 style={{ marginTop:'20px', color: '#1D9325', marginLeft:'20px', fontSize:'50px'}}>Ceylon Essence</h1>
         </Link>
+        
         <Col className="p-5 d-none d-lg-flex align-items-center" lg="8" sm="12">
           <div className="px-5 w-100 d-lg-flex align-items-center justify-content-center">
             <img className="img-cover" src={source} alt="Login Cover" />
@@ -85,10 +87,10 @@ const Login = () => {
         >
           <Col className="mx-auto px-xl-2" sm="8" md="6" lg="12">
             <CardTitle tag="h2" className="mb-1 fw-bold">
-              Welcome to HOPE!
+              Welcome to Admin Dashboard!
             </CardTitle>
             <CardText className="mb-2">
-              Together, We Can Change Lives – Log In and Let’s Get Started!
+            Where passion for flavor meets precision in every detail.
             </CardText>
             {error && <div className="alert alert-danger">{error}</div>}
             <Form className="mt-2 auth-login-form" onSubmit={handleLogin}>
@@ -131,13 +133,13 @@ const Login = () => {
 
             <div className="my-2 divider"></div>
             <div className="auth-footer-btn d-flex justify-content-center">
-              <Button color="facebook" onClick={() => window.open ('https://www.facebook.com/p/HOPE-Sri-lanka-100093114075486/', '_blank')}>
+              <Button color="facebook" onClick={() => window.open ('https://www.facebook.com/', '_blank')}>
                 <Facebook size={14} />
               </Button>
-              <Button onClick={() => window.location.href = 'tel:+94760113009'} color="google">
+              <Button onClick={() => window.location.href = 'tel:+9476111111'} color="google">
                 <PhoneCall size={13} />
               </Button>
-              <Button color="github" onClick={() => window.open ('mailto:hopeforthepeople21@gmail.com', '_blank')}>
+              <Button color="github" onClick={() => window.open ('mailto:info@gmail.com', '_blank')}>
                 <Mail size={14} />
               </Button>
             </div>
