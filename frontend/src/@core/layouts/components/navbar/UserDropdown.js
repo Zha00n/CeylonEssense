@@ -52,7 +52,7 @@ const UserDropdown = () => {
         />
       </DropdownToggle>
       <DropdownMenu end>
-        {username === 'admin' ? (
+       {username ? (
           <DropdownItem onClick={logout}>
             <LogOut size={14} className="me-75" />
             <span className="align-middle">Logout</span>

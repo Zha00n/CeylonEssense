@@ -145,7 +145,7 @@ const Login = () => {
             </div>
             
           </Col>
-          <div className="credit">Crafted with kindness by <a href="https://www.residuesolution.com/" target="_blank">Residue Solutions</a></div>
+          <div className="credit">Developed by <a href="https://www.residuesolution.com/" target="_blank">Residue Solutions (PVT) LTD</a></div>
         </Col>
       </Row>
     </div>

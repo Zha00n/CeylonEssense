@@ -10,7 +10,7 @@ const Footer = () => {
         <span className="d-none d-sm-inline-block">, All rights Reserved</span>
       </span>
       <span className="float-md-end d-none d-md-block">
-      A digital offering of care, from
+      A digital enforcement , from
         <a href="https://www.residuesolution.com/" target="_blank"> Residue Solutions</a>
       </span>
     </p>
