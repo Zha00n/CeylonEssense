@@ -135,6 +135,10 @@ export default function ResourceCenter() {
         {/* Spotlight on Crops - Hover Effects and Detailed Info */}
         <section className="px-20 py-12 space-y-12">
           <h2 className="mb-8 text-5xl font-bold text-center text-custom-brown">Spotlight on Our Products</h2>
+
+          {crops.length === 0 ? (
+            <div className="text-xl text-center text-gray-600">No resources available</div>
+          ) : (
           <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">
             {crops.map((crop) => (
               <motion.div
@@ -173,6 +177,7 @@ export default function ResourceCenter() {
               </motion.div>
             ))}
           </div>
+          )}
         </section>
 
 {/* Video Modal */}
@@ -203,10 +208,20 @@ export default function ResourceCenter() {
       {/* Flex container to align video and description */}
       <div className="flex items-start mt-4">
         {/* Video with larger size */}
-        <video className="w-[75%] rounded-lg" autoPlay controls>
+        {/* <video className="w-[75%] rounded-lg" autoPlay controls>
           <source src={selectedCrop.video} type="video/mp4" />
           Your browser does not support the video tag.
-        </video>
+        </video> */}
+          <iframe 
+              className="rounded-lg "
+              width=" 640" 
+              height="360" 
+              src={`https://www.youtube.com/embed/${selectedCrop.video}`} 
+              allow="autoplay; encrypted-media" 
+              allowFullScreen
+              title="Video"
+              autoPlay
+            ></iframe>
 
         {/* Description (25% of the container) */}
 
