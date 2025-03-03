@@ -11,8 +11,9 @@ import axios from "axios";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
+import { API_URL } from "@/configs/constants";
 
-const API_URL = 'http://localhost:5000';  // Replace with your backend API URL
+  // Replace with your backend API URL
 
 export default function Products() {
   const [products, setProducts] = useState([]);
@@ -63,7 +64,7 @@ export default function Products() {
       {
         breakpoint: 2560,
         settings: {
-          slidesToShow: 6,
+          slidesToShow: 5,
           slidesToScroll: 1,
           infinite: true,
           dots: false
@@ -72,7 +73,7 @@ export default function Products() {
       {
         breakpoint: 1440,
         settings: {
-          slidesToShow: 4,
+          slidesToShow: 5,
           slidesToScroll: 2,
           initialSlide: 2
         }

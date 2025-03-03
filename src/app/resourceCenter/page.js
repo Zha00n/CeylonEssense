@@ -6,6 +6,7 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import Process from "@/components/Process";
 import { ScrollShadow } from "@heroui/react";
+import { API_URL } from "@/configs/constants";
 
 export default function ResourceCenter() {
   const [hoveredCrop, setHoveredCrop] = useState(null);
@@ -16,7 +17,7 @@ export default function ResourceCenter() {
   useEffect(() => {
     const fetchResources = async () => {
       try {
-        const response = await fetch('http://localhost:5000/r/getAll');
+        const response = await fetch(`${API_URL}/r/getAll`);
         const data = await response.json();
         setCrops(data); // Store the fetched crops (resources) in state
       } catch (error) {
@@ -29,7 +30,7 @@ export default function ResourceCenter() {
   // Function to fetch resource by ID
   const fetchResourceById = async (resourceId) => {
     try {
-      const response = await fetch(`http://localhost:5000/r/get/${resourceId}`);
+      const response = await fetch(`${API_URL}/r/get/${resourceId}`);
       const data = await response.json();
       setSelectedCrop(data); // Set the selected crop's data
     } catch (error) {
@@ -155,7 +156,7 @@ export default function ResourceCenter() {
                 ></motion.div>
                 <div className="relative">
                   <Image
-                    src={`http://localhost:5000/${crop.image}`}
+                    src={`${API_URL}/${crop.image}`}
                     alt={crop.title}
                     width={600}
                     height={400}

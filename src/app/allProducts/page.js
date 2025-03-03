@@ -4,9 +4,9 @@ import Navbar from "@/components/Navbar";
 import { useState, useEffect } from "react";
 import axios from "axios"; // Import axios for making API requests
 import Image from "next/image";
+import { API_URL } from "@/configs/constants";
 
-// Set API base URL
-const API_URL = 'http://localhost:5000'; 
+
 
 export default function ProductPage() {
   const categories = ["All", "Spice", "Herb", "Handcraft", "Food"];
