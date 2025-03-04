@@ -8,11 +8,12 @@ import {
 } from "reactstrap";
 
 import logo from "../assets/images/logo/ce.png"
+import vid from "../../public/about.mp4"
 
 const Home = () => {
   return (
     <div className="imageEssence">
-      <video src="/././src/assets/videos/about.mp4" autoPlay ></video>
+      <video src={vid} autoPlay ></video>
       <div className="overlayH">
       
         <div className="textH">
