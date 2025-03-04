@@ -84,7 +84,7 @@ const HomePage = () => {
 
   {/* Image */}
   <div className="mt-10 lg:mt-0 lg:ml-12 w-full sm:w-[400px] md:w-[480px] lg:w-[500px] xl:w-[550px] 2xl:w-[600px] max-w-full">
-    <img className="object-cover w-full h-auto rounded-xl" src="/images/home.jpg" alt="Ceylon Essence" />
+    <img className="object-cover w-full h-auto rounded-xl" src="/images/ce.png" alt="Ceylon Essence" />
   </div>
 </section>
 

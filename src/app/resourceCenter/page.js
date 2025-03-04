@@ -43,9 +43,9 @@ export default function ResourceCenter() {
       <Navbar />
       <div className="mx-auto">
         {/* Hero Section with Parallax Effect */}
-        <div className="px-12 ">
+        <div className="px-4 sm:px-12 ">
           <motion.div
-            className="relative h-screen overflow-hidden"
+            className="relative h-[70vh] sm:h-screen overflow-hidden"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 1 }}
@@ -62,7 +62,7 @@ export default function ResourceCenter() {
             </video>
             <div className="absolute inset-0 flex items-center justify-center px-8 text-center text-white">
               <motion.h1
-                className="text-5xl font-extrabold"
+                className="text-3xl font-extrabold sm:text-5xl 2xl:text-8xl"
                 initial={{ y: 50, opacity: 0 }}
                 animate={{ y: 0, opacity: 1 }}
                 transition={{ duration: 1, delay: 0.5 }}
@@ -70,7 +70,7 @@ export default function ResourceCenter() {
                 Discover the Legacy of Sri Lankan Export Crops
               </motion.h1>
               <motion.p
-                className="mt-4 text-lg"
+                className="mt-4 text-base sm:text-lg 2xl:text-3xl"
                 initial={{ y: 50, opacity: 0 }}
                 animate={{ y: 0, opacity: 1 }}
                 transition={{ duration: 1, delay: 1 }}
@@ -81,10 +81,10 @@ export default function ResourceCenter() {
           </motion.div>
         </div>
 
-        <section className="px-20 py-24 space-y-12 bg-gray-50">
-          <div className="relative flex justify-center gap-5">
+        <section className="px-4 py-12 space-y-12 sm:px-20 sm:py-24 bg-gray-50 2xl:px-60">
+          <div className="relative flex flex-col justify-center gap-5 mb-20 sm:flex-row">
             <motion.h2
-              className="text-5xl font-bold text-center text-custom-green"
+              className="text-4xl font-bold text-center sm:text-5xl text-custom-green 2xl:text-6xl"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ duration: 1 }}
@@ -92,7 +92,7 @@ export default function ResourceCenter() {
               The Production
             </motion.h2>
             <motion.h2
-              className="text-5xl font-bold text-center text-custom-brown"
+              className="text-4xl font-bold text-center sm:text-5xl text-custom-brown 2xl:text-6xl"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ duration: 1 }}
@@ -101,10 +101,10 @@ export default function ResourceCenter() {
             </motion.h2>
           </div>
 
-          <div className="relative inset-0 flex items-start justify-between">
+          <div className="relative inset-0 flex flex-col items-start justify-between sm:flex-row">
             {/* Left side: Process steps */}
-            <div className="w-1/2 pr-8">
-              <div className="absolute top-0 w-px h-full transform -translate-x-1/2 bg-gray-300 left-1/2"></div>
+            <div className="w-full pr-0 mb-12 sm:w-1/2 sm:pr-8 sm:mb-0 md:w-full">
+              <div className="absolute top-0 hidden w-px h-full transform -translate-x-1/2 bg-gray-300 left-1/2 lg:block"></div>
               {["Planting", "Harvesting", "Processing", "Packaging"].map((step, index) => (
                 <motion.div
                   key={index}
@@ -117,8 +117,8 @@ export default function ResourceCenter() {
                     {index + 1}
                   </div>
                   <div className="flex flex-col">
-                    <h3 className="text-2xl font-semibold">{step}</h3>
-                    <p className="mt-2 text-gray-600">
+                    <h3 className="text-lg font-semibold sm:text-2xl">{step}</h3>
+                    <p className="mt-2 text-sm sm:text-gray-600">
                       {`The ${step.toLowerCase()} stage ensures high quality at every step of production.`}
                     </p>
                   </div>
@@ -127,115 +127,111 @@ export default function ResourceCenter() {
             </div>
 
             {/* Right side: Vector graphic */}
-            <div className="w-1/2 px-10 pb-20">
+            <div className="hidden w-full px-10 pb-20 md:w-[1/2] lg:block">
               <Process />
             </div>
+          </div>
+
+          
+          {/* bottom: Vector graphic in md */}
+          <div className="hidden w-full pb-20 pr-32 md:block lg:hidden">
+            <Process />
           </div>
         </section>
 
         {/* Spotlight on Crops - Hover Effects and Detailed Info */}
-        <section className="px-20 py-12 space-y-12">
-          <h2 className="mb-8 text-5xl font-bold text-center text-custom-brown">Spotlight on Our Products</h2>
+        <section className="px-4 py-12 space-y-12 sm:px-20">
+          <h2 className="mb-20 text-4xl font-bold text-center sm:text-5xl text-custom-brown 2xl:text-6xl">Spotlight on Our Products</h2>
 
           {crops.length === 0 ? (
             <div className="text-xl text-center text-gray-600">No resources available</div>
           ) : (
-          <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">
-            {crops.map((crop) => (
-              <motion.div
-                key={crop.resourceId} // Use unique resourceId here
-                className="relative p-6 overflow-hidden bg-white rounded-lg shadow-lg cursor-pointer"
-                onHoverStart={() => setHoveredCrop(crop.resourceId)}
-                onHoverEnd={() => setHoveredCrop(null)}
-                whileHover={{ scale: 1.05 }}
-                transition={{ duration: 0.3 }}
-                onClick={() => fetchResourceById(crop.resourceId)} // Fetch resource data by ID
-              >
+            <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">
+              {crops.map((crop) => (
                 <motion.div
-                  className="absolute inset-0 transition-opacity duration-300 bg-gray-800 opacity-0 hover:opacity-50"
-                ></motion.div>
-                <div className="relative">
-                  <Image
-                    src={`${API_URL}/${crop.image}`}
-                    alt={crop.title}
-                    width={600}
-                    height={400}
-                    className="object-cover w-full h-64 rounded-lg"
-                  />
-                  <h3 className="mt-4 text-2xl font-semibold">{crop.title}</h3> {/* Use crop.title */}
-                  <p className="mt-2 text-gray-600 line-clamp-3 ">{crop.description}</p> {/* Use crop.description */}
-                </div>
-                {hoveredCrop === crop.resourceId && (
+                  key={crop.resourceId} // Use unique resourceId here
+                  className="relative p-6 overflow-hidden bg-white rounded-lg shadow-lg cursor-pointer"
+                  onHoverStart={() => setHoveredCrop(crop.resourceId)}
+                  onHoverEnd={() => setHoveredCrop(null)}
+                  whileHover={{ scale: 1.05 }}
+                  transition={{ duration: 0.3 }}
+                  onClick={() => fetchResourceById(crop.resourceId)} // Fetch resource data by ID
+                >
                   <motion.div
-                    className="absolute inset-0 flex items-center justify-center text-center text-white bg-black bg-opacity-60"
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    transition={{ duration: 0.5 }}
-                  >
-                    <p className="text-xl font-semibold">{crop.title} - A treasure from Sri Lanka!</p>
-                  </motion.div>
-                )}
-              </motion.div>
-            ))}
-          </div>
+                    className="absolute inset-0 transition-opacity duration-300 bg-gray-800 opacity-0 hover:opacity-50"
+                  ></motion.div>
+                  <div className="relative">
+                    <Image
+                      src={`${API_URL}/${crop.image}`}
+                      alt={crop.title}
+                      width={600}
+                      height={400}
+                      className="object-cover w-full h-64 rounded-lg"
+                    />
+                    <h3 className="mt-4 text-xl font-semibold sm:text-2xl">{crop.title}</h3> {/* Use crop.title */}
+                    <p className="mt-2 text-sm sm:text-gray-600 line-clamp-3">{crop.description}</p> {/* Use crop.description */}
+                  </div>
+                  {hoveredCrop === crop.resourceId && (
+                    <motion.div
+                      className="absolute inset-0 flex items-center justify-center text-center text-white bg-black bg-opacity-60"
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      transition={{ duration: 0.5 }}
+                    >
+                      <p className="text-xl font-semibold">{crop.title} - A treasure from Sri Lanka!</p>
+                    </motion.div>
+                  )}
+                </motion.div>
+              ))}
+            </div>
           )}
         </section>
 
-{/* Video Modal */}
-{selectedCrop && (
-  <motion.div
-    className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-70"
-    initial={{ opacity: 0 }}
-    animate={{ opacity: 1 }}
-    transition={{ duration: 0.5 }}
-    onClick={() => setSelectedCrop(null)}
-  >
-    <motion.div
-      className="relative bg-[#403c3c] p-6 rounded-lg shadow-lg w-[90%] max-w-5xl "
-      initial={{ scale: 0.8 }}
-      animate={{ scale: 1 }}
-      transition={{ duration: 0.5 }}
-      onClick={(e) => e.stopPropagation()}
-    >
-      <button
-        className="absolute px-3 py-1 text-sm rounded-full text-custom-green top-2 right-2"
-        onClick={() => setSelectedCrop(null)}
-      >
-        ✖
-      </button>
+        {/* Video Modal */}
+        {selectedCrop && (
+          <motion.div
+            className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-70"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.5 }}
+            onClick={() => setSelectedCrop(null)}
+          >
+            <motion.div
+              className="relative bg-[#403c3c] p-6 rounded-lg shadow-lg w-[90%] max-w-5xl "
+              initial={{ scale: 0.8 }}
+              animate={{ scale: 1 }}
+              transition={{ duration: 0.5 }}
+              onClick={(e) => e.stopPropagation()}
+            >
+              <button
+                className="absolute px-3 py-1 text-sm rounded-full text-custom-green top-2 right-2"
+                onClick={() => setSelectedCrop(null)}
+              >
+                ✖
+              </button>
 
-      <h2 className="text-2xl font-bold text-white">{selectedCrop.title}</h2> {/* Use selectedCrop.title */}
+              <h2 className="text-2xl font-bold text-white">{selectedCrop.title}</h2> {/* Use selectedCrop.title */}
 
-      {/* Flex container to align video and description */}
-      <div className="flex items-start mt-4">
-        {/* Video with larger size */}
-        {/* <video className="w-[75%] rounded-lg" autoPlay controls>
-          <source src={selectedCrop.video} type="video/mp4" />
-          Your browser does not support the video tag.
-        </video> */}
-          <iframe 
-              className="rounded-lg "
-              width=" 640" 
-              height="360" 
-              src={`https://www.youtube.com/embed/${selectedCrop.video}`} 
-              allow="autoplay; encrypted-media" 
-              allowFullScreen
-              title="Video"
-              autoPlay
-            ></iframe>
+              {/* Flex container to align video and description */}
+              <div className="flex flex-col items-start mt-4 sm:flex-row">
+                {/* Video with larger size */}
+                <iframe 
+                  className="rounded-lg w-full sm:w-[75%] h-[300px] sm:h-[360px]" 
+                  src={`https://www.youtube.com/embed/${selectedCrop.video}`} 
+                  allow="autoplay; encrypted-media" 
+                  allowFullScreen
+                  title="Video"
+                  autoPlay
+                ></iframe>
 
-        {/* Description (25% of the container) */}
-
-        <ScrollShadow className="w-[25%] max-h-[400px] dark">
-        <p className="ml-6 mr-2 text-sm text-white">{selectedCrop.description}</p> 
-        </ScrollShadow>
-
-
-      </div>
-    </motion.div>
-  </motion.div>
-)}
-
+                {/* Description (25% of the container) */}
+                <ScrollShadow className="w-full sm:w-[25%] max-h-[400px] dark mt-4 sm:mt-0">
+                  <p className="ml-6 mr-2 text-sm sm:text-white">{selectedCrop.description}</p>
+                </ScrollShadow>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
       </div>
 
       <Footer />
