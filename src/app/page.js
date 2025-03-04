@@ -22,8 +22,8 @@ const HomePage = () => {
       {
         breakpoint: 2560,
         settings: {
-          slidesToShow: 11,
-          slidesToScroll: 1,
+          slidesToShow: 8,   // Displays 11 slides for large screens (2560px)
+          slidesToScroll: 1,   // Scroll 1 slide at a time
           infinite: true,
           dots: false
         }
@@ -31,456 +31,350 @@ const HomePage = () => {
       {
         breakpoint: 1440,
         settings: {
-          slidesToShow: 6,
-          slidesToScroll: 2,
-          initialSlide: 2
+          slidesToShow: 6,    // Displays 6 slides at a time for medium screens (1440px)
+          slidesToScroll: 1,   // Scroll 2 slides at a time
+          initialSlide: 2      // Starts at the 2nd slide
         }
       },
       {
         breakpoint: 1024,
         settings: {
-          slidesToShow: 4,
-          slidesToScroll: 1
+          slidesToShow: 4,    // Displays 4 slides at a time for tablets and small desktops (1024px)
+          slidesToScroll: 1   // Scroll 1 slide at a time
+        }
+      },
+      {
+        breakpoint: 768,
+        settings: {
+          slidesToShow: 3,    // Displays 3 slides for tablets (768px)
+          slidesToScroll: 1   // Scroll 1 slide at a time
+        }
+      },
+      {
+        breakpoint: 480,
+        settings: {
+          slidesToShow: 1,    // Displays 1 slide for mobile devices (480px)
+          slidesToScroll: 1   // Scroll 1 slide at a time
         }
       }
     ]
   };
-
+  
   return (
     <>
       <Navbar />
       <Hero />
-      <section className="py-[100px] text-left flex ml-[100px] w-full ">
-        <div className="w-[600px]">
-          <h2 className="mb-3 text-5xl text-green-600">Welcome to</h2>
-          <h1 className="font-bold text-green-600 text-7xl">Ceylon Essence</h1>
-          <p className="max-w-3xl mt-[50px] text-gray-600 text-justify">
-            Lorem ipsum, dolor sit amet consectetur adipisicing elit. Pariatur
-            maiores maxime expedita debitis, fuga numquam labore quia aspernatur
-            dolores hic inventore, suscipit architecto, rerum nulla consectetur
-            excepturi nam modi rem.Lorem ipsum dolor sit amet, consectetur
-            adipiscing elit, sed do eiusmod tempor incididunt ut labore et
-            dolore magna aliqua.
-          </p>
-          <Link href={"/about"}>
-          <button className="mt-[20px] bg-green-500 text-white px-4 py-2 rounded-full">
-            Read More
-          </button>
-          </Link>
-        </div>
-        <div className="ml-20 h-[320px] w-[500px]">
+      <section className="flex flex-col items-center px-4 py-16 mx-auto mt-2 mb-0 max-w-9xl sm:px-8 md:px-12 lg:px-16 xl:px-60 lg:flex-row 2xl:mt-40 2xl:mb-40 xl:mt-20">
+  {/* Text Content */}
+  <div className="text-center lg:w-1/2 lg:text-left">
+    <h2 className="mb-2 text-3xl text-green-600 sm:text-4xl md:text-5xl xl:text-5xl 2xl:text-8xl ">Welcome to</h2>
+    <h1 className="text-5xl font-bold text-green-600 sm:text-6xl md:text-7xl xl:text-5xl 2xl:text-[100px]">Ceylon Essence</h1>
+    <p className="max-w-2xl mx-auto mt-6 text-sm leading-relaxed text-justify text-gray-600 sm:text-base md:text-lg lg:mx-0">
+      Lorem ipsum, dolor sit amet consectetur adipisicing elit. Pariatur maiores maxime expedita debitis, 
+      fuga numquam labore quia aspernatur dolores hic inventore, suscipit architecto, rerum nulla 
+      consectetur excepturi nam modi rem.
+    </p>
+    <Link href="/about">
+      <button className="text-white bg-green-500 rounded-full sm:text-sm sm:py-2 sm:mt-4 sm:px-4 md:text-base md:py-2.5 md:mt-5 md:px-5 lg:text-lg lg:py-3 lg:mt-6 lg:px-6 xl:text-lg xl:py-3 xl:mt-6 xl:px-6 2xl:text-xl 2xl:py-4 2xl:mt-8 2xl:px-8
+  px-4">
+        Read More
+      </button>
+    </Link>
+  </div>
+
+  {/* Image */}
+  <div className="mt-10 lg:mt-0 lg:ml-12 w-full sm:w-[400px] md:w-[480px] lg:w-[500px] xl:w-[550px] 2xl:w-[600px] max-w-full">
+    <img className="object-cover w-full h-auto rounded-xl" src="/images/home.jpg" alt="Ceylon Essence" />
+  </div>
+</section>
+
+
+{/* Our Products */}
+<section className="py-[100px] max-h-screen">
+  <h1 className="text-5xl  ml-[20px] sm:ml-[50px] md:ml-[80px] lg:ml-[100px] font-bold mb-[40px] sm:mb-[60px] md:mb-[80px] lg:mb-[100px] text-left text-custom-brown 2xl:text-7xl">
+    Our Products
+  </h1>
+
+  <div className="flex items-center justify-center mt-2 2xl:mt-36">
+    <div className="grid h-auto grid-cols-1 gap-10 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 2xl:grid-cols-4">
+      {/* Product Card */}
+      <div className="relative items-center justify-center overflow-hidden transition-shadow rounded-[15px] cursor-pointer group hover:shadow-xl hover:shadow-black/30">
+        <div className="mx-auto h-60">
           <img
-            className="w-full h-full object-cover rounded-[12px] "
-            src="/images/home.jpg"
-            alt="image"
+            className="object-cover w-full h-full transition-transform duration-500 scale-110 group-hover:rotate-3 group-hover:scale-150"
+            src="/images/spices.jpg"
+            alt=""
           />
         </div>
-      </section>
-
-      {/* Our Products */}
-      <section className="py-[100px] max-h-screen">
-        <h1 className="text-5xl ml-[100px] font-bold mb-[100px] text-left text-custom-brown ">
-          Our Products
-        </h1>
-        {/* <div className="grid grid-cols-4 gap-6 mx-auto mt-6 max-w-7xl">
-          <div className="p-4 text-center bg-white shadow-lg">
-            <img src="/images/spices.jpg" alt="Spices" className="h-32 mx-auto" />
-            <p className="mt-2 font-semibold">Spices</p>
-          </div>
-          <div className="p-4 text-center bg-white shadow-lg">
-            <img src="/images/handcraft.jpg" alt="Bags" className="h-32 mx-auto" />
-            <p className="mt-2 font-semibold">Handcrafts</p>
-          </div>
-          <div className="p-4 text-center bg-white shadow-lg">
-            <img src="/images/herbs.jpg" alt="Tea" className="h-32 mx-auto" />
-            <p className="mt-2 font-semibold">Herbs</p>
-          </div>
-          <div className="p-4 text-center bg-white shadow-lg">
-            <img src="/images/food.jpg" alt="Oils" className="h-32 mx-auto" />
-            <p className="mt-2 font-semibold">Food & Beverages</p>
-          </div>
-        </div> */}
-        {/* <div className="flex flex-row w-[75%] mx-auto gap-10 justify-center">
-          <Link href="#">
-            <img
-              src="/images/spices.jpg"
-              alt="Spices"
-              className="mx-auto h-50"
-            />
-          </Link>
-
-          <Link href="#">
-            <img
-              src="/images/handcraft.jpg"
-              alt="Spices"
-              className="mx-auto h-50"
-            />
-          </Link>
-
-          <Link href="#">
-            <img
-              src="/images/herbs.jpg"
-              alt="Spices"
-              className="mx-auto h-50"
-            />
-          </Link>
-
-          <Link href="#">
-            <img src="/images/food.jpg" alt="Spices" className="mx-auto h-50" />
-          </Link>
-        </div> */}
-
-        <div className="flex items-center justify-center ">
-          <div className="grid grid-cols-1 gap-10 md:grid-cols-2 lg:grid-cols-4 h-50">
-            <div className="relative items-center justify-center overflow-hidden transition-shadow rounded-[15px] cursor-pointer group hover:shadow-xl hover:shadow-black/30">
-              <div className="mx-auto h-50">
-                <img
-                  className="object-cover w-full h-full transition-transform duration-500 scale-110 group-hover:rotate-3 group-hover:scale-150"
-                  src="/images/spices.jpg"
-                  alt=""
-                />
-              </div>
-              <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black group-hover:from-black/70 group-hover:via-black/60 group-hover:to-black/70"></div>
-              <div className="absolute inset-0 flex translate-y-[70%] flex-col items-center justify-center px-9 text-center transition-all duration-500 group-hover:translate-y-0 pt-5">
-                <h1 className="text-2xl font-bold text-white font-dmserif">
-                  Spices
-                </h1>
-                <Link href={"/allProducts"}>
-                <button className="rounded-full bg-amber-950 py-2 px-3.5 font-com text-sm capitalize text-white shadow shadow-black/60 mt-5 hover:bg-amber-900">
-                  See Products
-                </button>
-                </Link>
-              </div>
-            </div>
-            <div className="relative items-center justify-center overflow-hidden transition-shadow cursor-pointer group hover:shadow-xl hover:shadow-black/30 rounded-[15px]">
-              <div className="mx-auto h-50">
-                <img
-                  className="object-cover w-full h-full transition-transform duration-500 scale-110 group-hover:rotate-3 group-hover:scale-150"
-                  src="/images/handcraft.jpg"
-                  alt=""
-                />
-              </div>
-              <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black group-hover:from-black/70 group-hover:via-black/60 group-hover:to-black/70"></div>
-              <div className="absolute inset-0 flex translate-y-[70%] flex-col items-center justify-center px-9 text-center transition-all duration-500 group-hover:translate-y-0 pt-5">
-                <h1 className="text-2xl font-bold text-white font-dmserif">
-                  Handcrafts
-                </h1>
-                <Link href={"/allProducts"}>
-                <button className="rounded-full bg-amber-950 py-2 px-3.5 font-com text-sm capitalize text-white shadow shadow-black/60 mt-5 hover:bg-amber-900">
-                  See Products
-                </button>
-                </Link>
-              </div>
-            </div>
-            <div className="relative items-center justify-center overflow-hidden transition-shadow cursor-pointer group hover:shadow-xl hover:shadow-black/30 rounded-[15px]">
-              <div className="mx-auto h-60">
-                <img
-                  className="object-cover w-full h-full transition-transform duration-500 scale-110 group-hover:rotate-3 group-hover:scale-150"
-                  src="/images/herbs.jpg"
-                  alt=""
-                />
-              </div>
-              <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black group-hover:from-black/70 group-hover:via-black/60 group-hover:to-black/70"></div>
-              <div className="absolute inset-0 flex translate-y-[70%] flex-col items-center justify-center px-9 text-center transition-all duration-500 group-hover:translate-y-0 pt-5">
-                <h1 className="text-2xl font-bold text-white font-dmserif">
-                  Herbs
-                </h1>
-                <Link href={"/allProducts"}>
-                <button className="rounded-full bg-amber-950 py-2 px-3.5 font-com text-sm capitalize text-white shadow shadow-black/60 mt-5 hover:bg-amber-900">
-                  See Products
-                </button>
-                </Link>
-              </div>
-            </div>
-            <div className="relative items-center justify-center overflow-hidden transition-shadow cursor-pointer group hover:shadow-xl hover:shadow-black/30 rounded-[15px]">
-              <div className="mx-auto h-50">
-                <img
-                  className="object-cover w-full h-full transition-transform duration-500 scale-110 group-hover:rotate-3 group-hover:scale-150"
-                  src="/images/food.jpg"
-                  alt=""
-                />
-              </div>
-              <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black group-hover:from-black/70 group-hover:via-black/60 group-hover:to-black/70"></div>
-              <div className="absolute inset-0 flex translate-y-[70%] flex-col items-center justify-center px-9 text-center transition-all duration-500 group-hover:translate-y-0 pt-10">
-                <h1 className="text-2xl font-bold text-white font-dmserif">
-                  Food & Beverages
-                </h1>
-                <Link href={"/allProducts"}>
-                <button className="rounded-full bg-amber-950 py-2 px-3.5 font-com text-sm capitalize text-white shadow shadow-black/60 mt-5 hover:bg-amber-900">
-                  See Products
-                </button>
-                </Link>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <p className="justify-center mx-auto mt-20 text-justify px-[200px] text-zinc-600">
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Aliquid eum
-          minima, maiores odit modi id accusamus natus dolores labore quae
-          accusantium nulla molestiae vitae ex veniam pariatur beatae ducimus
-          ipsum! Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-          Mollitia, expedita quis veritatis id ipsam molestias laudantium ipsa
-          error iste repellat provident corrupti nam quam eius fugiat
-          voluptatibus consectetur animi eligendi?
-        </p>
-      </section>
-
-      {/* Heritage Section */}
-      <section className="py-[200px]">
-        {/* <h3 className="text-5xl font-bold ml-[100px] mb-16 text-green-600">
-          Heritage of Ceylon Trade
-        </h3>
-        <div className="grid grid-cols-2 gap-4 mx-auto mt-6 max-w-7xl">
-          <div>
-            <img src="/images/hero5.jpg" alt="Heritage" className="w-full" />
-          </div>
-          <div>
-            <p className="text-gray-600">
-              Sri Lanka has a long history as a hub for trade, particularly in
-              export crops like cinnamon and pepper...
-            </p>
-            <button className="px-4 py-2 mt-4 text-white bg-green-500 rounded-lg">
-              Read More
+        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black group-hover:from-black/70 group-hover:via-black/60 group-hover:to-black/70"></div>
+        <div className="absolute inset-0 flex translate-y-[70%] flex-col items-center justify-center px-9 text-center transition-all duration-500 group-hover:translate-y-0 pt-5">
+          <h1 className="text-2xl font-bold text-white font-dmserif">
+            Spices
+          </h1>
+          <Link href={"/allProducts"}>
+            <button className="rounded-full bg-amber-950 py-2 px-3.5 font-com text-sm capitalize text-white shadow shadow-black/60 mt-5 hover:bg-amber-900">
+              See Products
             </button>
-          </div>
-        </div> */}
-
-        <h3 className="text-5xl font-bold ml-[100px] mb-16 text-green-600">
-          Heritage of Ceylon Trade
-        </h3>
-
-        <div className="slider-container">
-          <Slider {...settings}>
-            {/* <div className="bg-green-400">
-              <div className="w-[300px] h-[400px] bg-red-500"></div>
-            </div>
-            
-            <div>
-              <div className="w-[300px] h-[400px] bg-red-500"></div>
-            </div>
-            
-            <div>
-              <div className="w-[300px] h-[400px] bg-red-500"></div>
-            </div>
-            
-            <div>
-              <div className="w-[300px] h-[400px] bg-red-500"></div>
-            </div>
-
-            <div>
-              <div className="w-[300px] h-[400px] bg-red-500"></div>
-            </div>
-
-            <div>
-              <div className="w-[300px] h-[400px] bg-red-500"></div>
-            </div> */}
-            <div className="w-[250px] h-[400px]">
-              <div className="w-[250px] relative items-center justify-center overflow-hidden transition-shadow cursor-pointer group hover:shadow-xl hover:shadow-black/30">
-                <img
-                  className="object-cover w-[250px] h-[400px] transition-transform duration-1000 scale-100 group-hover:scale-110"
-                  src="https://travellersisle.com/wp-content/uploads/2022/04/Tea-history-in-Sri-Lanka-920x613.webp"
-                  alt=""
-                />
-
-                <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black group-hover:from-green-800/60 group-hover:via-green-800/50 group-hover:to-green-800/60"></div>
-                <div className="max-w-[250px] absolute inset-0 flex translate-y-[100%] flex-col items-center justify-center px-9 text-center transition-all duration-500 group-hover:translate-y-0 pt-5 gap-40">
-                  <h1 className="text-2xl font-bold text-white font-dmserif">
-                    Ceylon Tea
-                  </h1>
-                  <p className="mb-3 italic text-white transition-opacity duration-300 opacity-0 text-1xl group-hover:opacity-100">
-                    The ancient Ceylon tea trade, rooted in Sri Lanka's lush
-                    highlands, flourished as a vital export, shaping global tea
-                    culture with its rich, aromatic blends
-                  </p>
-                </div>
-              </div>
-            </div>
-            <div className="w-[250px] h-[400px]">
-              <div className="w-[250px] relative items-center justify-center overflow-hidden transition-shadow cursor-pointer group hover:shadow-xl hover:shadow-black/30">
-                <img
-                  className="object-cover w-[250px] h-[400px] transition-transform duration-1000 scale-100 group-hover:scale-110"
-                  src="https://lankapura.com/wp-content/gallery/people-and-lifestyle/teal-pickers-ceylon.jpg"
-                  alt=""
-                />
-
-                <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black group-hover:from-green-800/60 group-hover:via-green-800/50 group-hover:to-green-800/60"></div>
-                <div className="max-w-[250px] absolute inset-0 flex translate-y-[100%] flex-col items-center justify-center px-9 text-center transition-all duration-500 group-hover:translate-y-0 pt-5 gap-60">
-                  <h1 className="text-2xl font-bold text-white font-dmserif">
-                    Coffee
-                  </h1>
-                  <p className="mb-3 italic text-white transition-opacity duration-300 opacity-0 text-1xl group-hover:opacity-100">
-                    Once the king of exports, Sri Lanka’s coffee had its moment
-                    — until tea took over the throne.
-                  </p>
-                </div>
-              </div>
-            </div>
-            <div className="w-[250px] h-[400px]">
-              <div className="w-[250px] relative items-center justify-center overflow-hidden transition-shadow cursor-pointer group hover:shadow-xl hover:shadow-black/30">
-                <img
-                  className="object-cover w-[250px] h-[400px] transition-transform duration-1000 scale-100 group-hover:scale-110"
-                  src="https://lakcinnamongroup.lk/wp-content/uploads/2020/08/History-3-1170x700.jpg"
-                  alt=""
-                />
-
-                <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black group-hover:from-green-800/60 group-hover:via-green-800/50 group-hover:to-green-800/60"></div>
-                <div className="max-w-[250px] absolute inset-0 flex translate-y-[100%] flex-col items-center justify-center px-9 text-center transition-all duration-500 group-hover:translate-y-0 pt-5 gap-52">
-                  <h1 className="text-2xl font-bold text-white font-dmserif">
-                    Cinnoman
-                  </h1>
-                  <p className="mb-3 italic text-white transition-opacity duration-300 opacity-0 text-1xl group-hover:opacity-100">
-                    Cinnamon, native to Sri Lanka, has been a prized spice for
-                    centuries, valued for its sweet flavor and medicinal
-                    properties.
-                  </p>
-                </div>
-              </div>
-            </div>
-            <div className="w-[250px] h-[400px]">
-              <div className="w-[250px] relative items-center justify-center overflow-hidden transition-shadow cursor-pointer group hover:shadow-xl hover:shadow-black/30">
-                <img
-                  className="object-cover w-[250px] h-[400px] transition-transform duration-1000 scale-100 group-hover:scale-110"
-                  src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTZURSMNA5PyP5q0O2d0fzZvv-Lcp5G5R7yFQ&s"
-                  alt=""
-                />
-
-                <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black group-hover:from-green-800/60 group-hover:via-green-800/50 group-hover:to-green-800/60"></div>
-                <div className="max-w-[250px] absolute inset-0 flex translate-y-[100%] flex-col items-center justify-center px-9 text-center transition-all duration-500 group-hover:translate-y-0 pt-5 gap-52">
-                  <h1 className="text-2xl font-bold text-white font-dmserif">
-                    Rubber
-                  </h1>
-                  <p className="mb-3 italic text-white transition-opacity duration-300 opacity-0 text-1xl group-hover:opacity-100">
-                    Bouncing from the island to the world, Sri Lankan rubber
-                    revolutionized industries and kept economies rolling.
-                  </p>
-                </div>
-              </div>
-            </div>
-            <div className="w-[250px] h-[400px]">
-              <div className="w-[250px] relative items-center justify-center overflow-hidden transition-shadow cursor-pointer group hover:shadow-xl hover:shadow-black/30">
-                <img
-                  className="object-cover w-[250px] h-[400px] transition-transform duration-1000 scale-100 group-hover:scale-110"
-                  src="https://raayagems.com/cdn/shop/articles/srilanka_jpg.webp?v=1728032825"
-                  alt=""
-                />
-
-                <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black group-hover:from-green-800/60 group-hover:via-green-800/50 group-hover:to-green-800/60"></div>
-                <div className="max-w-[250px] absolute inset-0 flex translate-y-[100%] flex-col items-center justify-center px-9 text-center transition-all duration-500 group-hover:translate-y-0 pt-5 gap-60">
-                  <h1 className="text-2xl font-bold text-white font-dmserif">
-                    Gems
-                  </h1>
-                  <p className="mb-3 italic text-white transition-opacity duration-300 opacity-0 text-1xl group-hover:opacity-100">
-                    Sri Lankan gems, sparkling with centuries of history, have
-                    always dazzled the world’s elite.
-                  </p>
-                </div>
-              </div>
-            </div>
-            <div className="w-[250px] h-[400px]">
-              <div className="w-[250px] relative items-center justify-center overflow-hidden transition-shadow cursor-pointer group hover:shadow-xl hover:shadow-black/30">
-                <img
-                  className="object-cover w-[250px] h-[400px] transition-transform duration-1000 scale-100 group-hover:scale-110"
-                  src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTCbUs4XMX_2VOnais2mNktT7TQ6pSNJntLtA&s"
-                  alt=""
-                />
-
-                <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black group-hover:from-green-800/60 group-hover:via-green-800/50 group-hover:to-green-800/60"></div>
-                <div className="max-w-[250px] absolute inset-0 flex translate-y-[100%] flex-col items-center justify-center px-9 text-center transition-all duration-500 group-hover:translate-y-0 pt-5 gap-60">
-                  <h1 className="text-2xl font-bold text-white font-dmserif">
-                    Coconut
-                  </h1>
-                  <p className="mb-3 italic text-white transition-opacity duration-300 opacity-0 text-1xl group-hover:opacity-100">
-                    From oil to coir, Sri Lanka’s coconuts have been trading
-                    treasures, versatile and ever-valuable.
-                  </p>
-                </div>
-              </div>
-            </div>
-            <div className="w-[250px] h-[400px]">
-              <div className="w-[250px] relative items-center justify-center overflow-hidden transition-shadow cursor-pointer group hover:shadow-xl hover:shadow-black/30">
-                <img
-                  className="object-cover w-[250px] h-[400px] transition-transform duration-1000 scale-100 group-hover:scale-110"
-                  src="https://damiatea.com/wp-content/uploads/2023/06/Anverallytea.jpg"
-                  alt=""
-                />
-
-                <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black group-hover:from-green-800/60 group-hover:via-green-800/50 group-hover:to-green-800/60"></div>
-                <div className="max-w-[250px] absolute inset-0 flex translate-y-[100%] flex-col items-center justify-center px-9 text-center transition-all duration-500 group-hover:translate-y-0 pt-5 gap-52">
-                  <h1 className="text-2xl font-bold text-white font-dmserif">
-                    Pearls
-                  </h1>
-                  <p className="mb-3 italic text-white transition-opacity duration-300 opacity-0 text-1xl group-hover:opacity-100">
-                    Sri Lanka’s pearls, glistening with timeless beauty, have
-                    been the island’s lustrous treasure in global trade for
-                    centuries.
-                  </p>
-                </div>
-              </div>
-            </div>
-          </Slider>
+          </Link>
         </div>
+      </div>
 
-        <div className="justify-center w-full mx-auto text-center px-[200px]">
-          <p className="justify-center mx-auto mt-20 text-justify text-zinc-600">
-            Lorem ipsum, dolor sit amet consectetur adipisicing elit. Pariatur
-            maiores maxime expedita debitis, fuga numquam labore quia aspernatur
-            dolores hic inventore, suscipit architecto, rerum nulla consectetur
-            excepturi nam modi rem.Lorem ipsum dolor sit amet, consectetur
-            adipiscing elit, sed do eiusmod tempor incididunt ut labore et
-            dolore magna aliqua.
-          </p>
-          <button className="mt-[20px] bg-green-500 text-white px-2 py-1 rounded-full text-sm">
-            Read More
-          </button>
+      {/* Other product cards */}
+      <div className="relative items-center justify-center overflow-hidden transition-shadow cursor-pointer group hover:shadow-xl hover:shadow-black/30 rounded-[15px]">
+        <div className="mx-auto h-60">
+          <img
+            className="object-cover w-full h-full transition-transform duration-500 scale-110 group-hover:rotate-3 group-hover:scale-150"
+            src="/images/handcraft.jpg"
+            alt=""
+          />
         </div>
-      </section>
-
-      <section className="max-h-screen ">
-        <div className="flex justify-center gap-2 mx-auto">
-          <div className="ml-[100px] w-[550px] py-7">
-            <p className="text-3xl font-bold tracking-[2] text-custom-brown/80">
-              Explore the Journey of Quality,
-            </p>
-            <div className="flex gap-5 mt-5">
-              <p className="text-5xl font-bold text-custom-green">From Plant</p>
-              <p className="text-5xl font-bold text-custom-brown">to Product</p>
-            </div>
-            <p className="px-16 mt-10 text-[20px] text-custom-brown/70 leading-tight">
-              Lorem ipsum dolor sit amet consectetur adipisicing elit.
-              Consequuntur voluptatem optio voluptas sint corrupti quibusdam
-              numquam neque? Iure autem velit mollitia. Obcaecati sunt quasi
-              illo sequi similique omnis perferendis officiis.
-            </p>
-            <Link href={"/resourceCenter"}>
-            <button className="mt-[20px] bg-custom-brown/70 text-white px-2 py-1 rounded-full text-sm ml-16">
-              Read More
+        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black group-hover:from-black/70 group-hover:via-black/60 group-hover:to-black/70"></div>
+        <div className="absolute inset-0 flex translate-y-[70%] flex-col items-center justify-center px-9 text-center transition-all duration-500 group-hover:translate-y-0 pt-5">
+          <h1 className="text-2xl font-bold text-white font-dmserif">
+            Handcrafts
+          </h1>
+          <Link href={"/allProducts"}>
+            <button className="rounded-full bg-amber-950 py-2 px-3.5 font-com text-sm capitalize text-white shadow shadow-black/60 mt-5 hover:bg-amber-900">
+              See Products
             </button>
-            </Link>
-          </div>
-          <div className=" w-[680px] h-[420px] rounded-lg">
-            <video
-              className="object-cover border rounded-lg border-zinc-200"
-              autoPlay
-              loop
-              muted
-              playsInline
-              src="/images/vid.mp4"
-            />
+          </Link>
+        </div>
+      </div>
+
+      <div className="relative items-center justify-center overflow-hidden transition-shadow cursor-pointer group hover:shadow-xl hover:shadow-black/30 rounded-[15px]">
+        <div className="mx-auto h-60">
+          <img
+            className="object-cover w-full h-full transition-transform duration-500 scale-110 group-hover:rotate-3 group-hover:scale-150"
+            src="/images/herbs.jpg"
+            alt=""
+          />
+        </div>
+        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black group-hover:from-black/70 group-hover:via-black/60 group-hover:to-black/70"></div>
+        <div className="absolute inset-0 flex translate-y-[70%] flex-col items-center justify-center px-9 text-center transition-all duration-500 group-hover:translate-y-0 pt-5">
+          <h1 className="text-2xl font-bold text-white font-dmserif">
+            Herbs
+          </h1>
+          <Link href={"/allProducts"}>
+            <button className="rounded-full bg-amber-950 py-2 px-3.5 font-com text-sm capitalize text-white shadow shadow-black/60 mt-5 hover:bg-amber-900">
+              See Products
+            </button>
+          </Link>
+        </div>
+      </div>
+
+      <div className="relative items-center justify-center overflow-hidden transition-shadow cursor-pointer group hover:shadow-xl hover:shadow-black/30 rounded-[15px]">
+        <div className="mx-auto h-60">
+          <img
+            className="object-cover w-full h-full transition-transform duration-500 scale-110 group-hover:rotate-3 group-hover:scale-150"
+            src="/images/food.jpg"
+            alt=""
+          />
+        </div>
+        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black group-hover:from-black/70 group-hover:via-black/60 group-hover:to-black/70"></div>
+        <div className="absolute inset-0 flex translate-y-[70%] flex-col items-center justify-center px-9 text-center transition-all duration-500 group-hover:translate-y-0 pt-10">
+          <h1 className="text-2xl font-bold text-white font-dmserif">
+            Food & Beverages
+          </h1>
+          <Link href={"/allProducts"}>
+            <button className="rounded-full bg-amber-950 py-2 px-3.5 font-com text-sm capitalize text-white shadow shadow-black/60 mt-5 hover:bg-amber-900">
+              See Products
+            </button>
+          </Link>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <p className="justify-center mx-auto mt-20 text-justify px-[20px] sm:px-[50px] md:px-[100px] lg:px-[150px] xl:px-[200px] 2xl:px-[250px] text-zinc-600 text-1xl 2xl:text-2xl 2xl:mt-40">
+    Lorem ipsum dolor sit amet consectetur adipisicing elit. Aliquid eum
+    minima, maiores odit modi id accusamus natus dolores labore quae
+    accusantium nulla molestiae vitae ex veniam pariatur beatae ducimus
+    ipsum! Lorem ipsum dolor sit amet, consectetur adipisicing elit.
+    Mollitia, expedita quis veritatis id ipsam molestias laudantium ipsa
+    error iste repellat provident corrupti nam quam eius fugiat
+    voluptatibus consectetur animi eligendi?
+  </p>
+</section>
+
+{/* Heritage Section */}
+<section className="py-[200px] lg:mt-2 xl:mt-2 2xl:mt-2 md:mt-[300px] mt-[1000px]">
+  <h3 className="text-5xl font-bold ml-[100px] mb-16 text-green-600 2xl:mb-32 2xl:text-7xl">
+    Heritage of Ceylon Trade
+  </h3>
+
+  <div className="slider-container">
+    <Slider {...settings}>
+      {[
+        {
+          img: "https://travellersisle.com/wp-content/uploads/2022/04/Tea-history-in-Sri-Lanka-920x613.webp",
+          title: "Ceylon Tea",
+          description:
+            "The ancient Ceylon tea trade, rooted in Sri Lanka's lush highlands, flourished as a vital export, shaping global tea culture with its rich, aromatic blends",
+        },
+        {
+          img: "https://lankapura.com/wp-content/gallery/people-and-lifestyle/teal-pickers-ceylon.jpg",
+          title: "Coffee",
+          description:
+            "Once the king of exports, Sri Lanka’s coffee had its moment — until tea took over the throne.",
+        },
+        {
+          img: "https://lakcinnamongroup.lk/wp-content/uploads/2020/08/History-3-1170x700.jpg",
+          title: "Cinnoman",
+          description:
+            "Cinnamon, native to Sri Lanka, has been a prized spice for centuries, valued for its sweet flavor and medicinal properties.",
+        },
+        {
+          img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTZURSMNA5PyP5q0O2d0fzZvv-Lcp5G5R7yFQ&s",
+          title: "Rubber",
+          description:
+            "Bouncing from the island to the world, Sri Lankan rubber revolutionized industries and kept economies rolling.",
+        },
+        {
+          img: "https://raayagems.com/cdn/shop/articles/srilanka_jpg.webp?v=1728032825",
+          title: "Gems",
+          description:
+            "Sri Lankan gems, sparkling with centuries of history, have always dazzled the world’s elite.",
+        },
+        {
+          img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTCbUs4XMX_2VOnais2mNktT7TQ6pSNJntLtA&s",
+          title: "Coconut",
+          description:
+            "From oil to coir, Sri Lanka’s coconuts have been trading treasures, versatile and ever-valuable.",
+        },
+        {
+          img: "https://damiatea.com/wp-content/uploads/2023/06/Anverallytea.jpg",
+          title: "Pearls",
+          description:
+            "Sri Lanka’s pearls, glistening with timeless beauty, have been the island’s lustrous treasure in global trade for centuries.",
+        },
+        
+
+
+
+
+        {
+          img: "https://travellersisle.com/wp-content/uploads/2022/04/Tea-history-in-Sri-Lanka-920x613.webp",
+          title: "Ceylon Tea",
+          description:
+            "The ancient Ceylon tea trade, rooted in Sri Lanka's lush highlands, flourished as a vital export, shaping global tea culture with its rich, aromatic blends",
+        },
+        {
+          img: "https://lankapura.com/wp-content/gallery/people-and-lifestyle/teal-pickers-ceylon.jpg",
+          title: "Coffee",
+          description:
+            "Once the king of exports, Sri Lanka’s coffee had its moment — until tea took over the throne.",
+        },
+        {
+          img: "https://lakcinnamongroup.lk/wp-content/uploads/2020/08/History-3-1170x700.jpg",
+          title: "Cinnoman",
+          description:
+            "Cinnamon, native to Sri Lanka, has been a prized spice for centuries, valued for its sweet flavor and medicinal properties.",
+        },
+        {
+          img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTZURSMNA5PyP5q0O2d0fzZvv-Lcp5G5R7yFQ&s",
+          title: "Rubber",
+          description:
+            "Bouncing from the island to the world, Sri Lankan rubber revolutionized industries and kept economies rolling.",
+        },
+        {
+          img: "https://raayagems.com/cdn/shop/articles/srilanka_jpg.webp?v=1728032825",
+          title: "Gems",
+          description:
+            "Sri Lankan gems, sparkling with centuries of history, have always dazzled the world’s elite.",
+        },
+        {
+          img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTCbUs4XMX_2VOnais2mNktT7TQ6pSNJntLtA&s",
+          title: "Coconut",
+          description:
+            "From oil to coir, Sri Lanka’s coconuts have been trading treasures, versatile and ever-valuable.",
+        },
+        {
+          img: "https://damiatea.com/wp-content/uploads/2023/06/Anverallytea.jpg",
+          title: "Pearls",
+          description:
+            "Sri Lanka’s pearls, glistening with timeless beauty, have been the island’s lustrous treasure in global trade for centuries.",
+        },
+      ].map((card, index) => (
+            <div
+
+            key={index}
+            className="w-[150px] h-[240px] sm:w-[180px] sm:h-[288px] md:w-[200px] md:h-[320px] lg:w-[220px] lg:h-[360px] xl:w-[250px] xl:h-[400px] 2xl:w-[350px] 2xl:h-[600px]"
+            >
+            <div className="relative items-center justify-center w-full h-full overflow-hidden transition-shadow cursor-pointer group hover:shadow-xl hover:shadow-black/30">
+              <img
+                className="object-cover w-full h-full transition-transform duration-1000 scale-100 group-hover:scale-110"
+                src={card.img}
+                alt={card.title}
+              />
+            <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black group-hover:from-green-800/60 group-hover:via-green-800/50 group-hover:to-green-800/60"></div>
+            <div className="max-w-full absolute inset-0 flex translate-y-[100%] flex-col items-center justify-center px-9 text-center transition-all duration-500 group-hover:translate-y-0 pt-5 gap-5">
+              <h1 className="text-2xl font-bold text-white font-dmserif">{card.title}</h1>
+              <p className="mb-3 italic text-white transition-opacity duration-300 opacity-0 text-1xl group-hover:opacity-100">
+                {card.description}
+              </p>
+            </div>
           </div>
         </div>
-      </section>
+      ))}
+    </Slider>
+  </div>
+
+  <div className="justify-center w-full mx-auto text-center px-[20px] sm:px-[100px] md:px-[150px] lg:px-[180px] xl:px-[200px] 2xl:px-[250px]">
+  <p className="justify-center mx-auto mt-20 text-lg text-justify text-zinc-600 2xl:text-2xl">
+    Lorem ipsum, dolor sit amet consectetur adipisicing elit. Pariatur maiores maxime expedita debitis, fuga numquam labore quia aspernatur dolores hic inventore, suscipit architecto, rerum nulla consectetur excepturi nam modi rem.
+  </p>
+  <button className="mt-[20px] bg-green-500 text-white px-2 py-1 rounded-full text-sm 2xl:text-2xl 2xl:mt-[70px]">
+    Read More
+  </button>
+</div>
+</section>
+
+<section className="max-h-screen ">
+  <div className="flex justify-center gap-2 mx-auto">
+    <div className="ml-[100px] w-[550px] py-7 sm:w-[600px] md:w-[650px] lg:w-[700px] xl:w-[800px] 2xl:w-[900px]">
+      <p className="text-3xl font-bold tracking-[2] text-custom-brown/80 2xl:text-4xl">
+        Explore the Journey of Quality,
+      </p>
+      <div className="flex gap-5 mt-5">
+        <p className="text-5xl font-bold text-custom-green 2xl:text-7xl">From Plant</p>
+        <p className="text-5xl font-bold text-custom-brown 2xl:text-7xl">to Product</p>
+      </div>
+      <p className="px-16 mt-10 text-[20px] text-custom-brown/70 leading-tight sm:px-12 md:px-14 lg:px-16 xl:px-20 2xl:mt-20">
+        Lorem ipsum dolor sit amet consectetur adipisicing elit.
+        Consequuntur voluptatem optio voluptas sint corrupti quibusdam
+        numquam neque? Iure autem velit mollitia. Obcaecati sunt quasi
+        illo sequi similique omnis perferendis officiis.
+      </p>
+      <Link href={"/resourceCenter"}>
+        <button className="mt-[20px] bg-custom-brown/70 text-white px-2 py-1 rounded-full text-sm ml-16 2xl:mt-15 2xl:text-md">
+          Read More
+        </button>
+      </Link>
+    </div>
+    <div className="w-[680px] h-[420px] rounded-lg sm:w-[700px] sm:h-[440px] md:w-[750px] md:h-[480px] lg:w-[800px] lg:h-[520px] xl:w-[900px] xl:h-[560px] 2xl:w-[1000px] 2xl:h-[600px]">
+      <video
+        className="object-cover border rounded-lg border-zinc-200"
+        autoPlay
+        loop
+        muted
+        playsInline
+        src="/images/vid.mp4"
+      />
+    </div>
+  </div>
+</section>
+
 
       {/* Contact Us Section */}
-      <section className="py-[100px]">
-        <h3 className="ml-[100px] text-3xl font-bold text-custom-green/60">
-          We're Ready to Help,
-        </h3>
-        <h3 className="ml-[100px] text-5xl font-bold text-custom-green mt-2">
-          Reach Out Today!
-        </h3>
+<section className="py-[50px] sm:py-[60px] md:py-[80px] lg:py-[100px] lg:mt-2 xl:mt-2 2xl:mt-2 md:mt-[300px] mt-[200px]">
+  <h3 className="text-lg sm:text-xl md:text-2xl lg:text-3xl xl:text-4xl 2xl:text-6xl font-bold text-custom-green/60 sm:ml-[20px] md:ml-[40px] lg:ml-[100px] 2xl:ml-[200px] ml-[20px]">
+    We're Ready to Help,
+  </h3>
+  <h3 className="text-3xl sm:text-4xl md:text-5xl lg:text-5xl xl:text-6xl 2xl:text-8xl font-bold text-custom-green mt-2 sm:ml-[20px] md:ml-[40px] lg:ml-[100px] 2xl:ml-[200px] ml-[20px]">
+    Reach Out Today!
+  </h3>
         
-        <div className="mt-[50px] pb-[100px]">
+        <div className="mt-[100px] pb-[100px]">
           <div className="grid sm:grid-cols-2 items-start gap-12 p-8 mx-auto max-w-4xl bg-white shadow-[0_2px_10px_-3px_rgba(6,81,237,0.3)] rounded-md font-[sans-serif]">
             <div>
               <h1 className="text-3xl font-bold text-gray-800/70">Let's Talk</h1>

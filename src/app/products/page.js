@@ -4,7 +4,7 @@ import Navbar from "../../components/Navbar";
 import Footer from "../../components/Footer";
 import ProductCardB from "../../components/ProductCardB"; 
 import ProductCardG from "../../components/ProductCardG";
-import ProductCardMore from "../../components/ProductCardMore"
+import ProductCardMore from "../../components/ProductCardMore";
 import { FaAngleDoubleRight } from "react-icons/fa";
 import Link from 'next/link';
 import axios from "axios";
@@ -13,7 +13,7 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import { API_URL } from "@/configs/constants";
 
-  // Replace with your backend API URL
+// Replace with your backend API URL
 
 export default function Products() {
   const [products, setProducts] = useState([]);
@@ -84,6 +84,20 @@ export default function Products() {
           slidesToShow: 3,
           slidesToScroll: 1
         }
+      },
+      {
+        breakpoint: 768,
+        settings: {
+          slidesToShow: 2,
+          slidesToScroll: 1
+        }
+      },
+      {
+        breakpoint: 480,
+        settings: {
+          slidesToShow: 1,
+          slidesToScroll: 1
+        }
       }
     ]
   };
@@ -91,13 +105,12 @@ export default function Products() {
   return (
     <>
       <Navbar />
-      <div className="relative w-full h-screen ">
-        <div className="absolute md:mt-10 lg:mt-20 2xl:mt-40 md:ml-10 lg:ml-20 2xl:ml-40 sm:text-[40px] md:text=[80px] lg:text-[100px] 2xl:text-[240px]">
+      <div className="relative w-full h-screen">
+        <div className="absolute md:mt-10 lg:mt-20 2xl:mt-40 md:ml-10 lg:ml-20 2xl:ml-40 sm:text-[30px] md:text-[60px] lg:text-[80px] 2xl:text-[150px]">
           <h1 className="font-extrabold text-white drop-shadow-2xl">Nature’s Treasure, </h1>
           <h1 className="font-extrabold text-white drop-shadow-2xl">Ceylon’s Best,</h1>
-          <h1 className="font-extrabold text-white drop-shadow-2xl">Your Delight.</h1>          
+          <h1 className="font-extrabold text-white drop-shadow-2xl">Your Delight.</h1>
         </div>
-
         <img
           src={"images/image.jpg"}
           alt="Spices"
@@ -105,79 +118,78 @@ export default function Products() {
         />
       </div>
 
-      {/* Spice Products */}
-      <div className="container mx-auto py-[100px]">
-        <h1 className="mb-20 text-[40px] font-bold text-center text-custom-brown">Spice Products</h1>
-        <div className="flex justify-center gap-[100px]">
-          {spices.map((product, index) => (
-            <ProductCardB key={index} product={product} /> // Use ProductCardB for spice products
-          ))}
-        </div>
-        
-        <div className="flex flex-col items-center mt-10">
-          <Link href={"/allProducts"}>
-            <button className="mt-7 w-[134px] h-[42px] bg-custom-brown/75 text-white rounded-[12px] text-small hover:bg-custom-brown/90 transition" >
-              View All Products
-            </button>
-          </Link>
-          <FaAngleDoubleRight className="mt-2 text-center text-medium text-custom-brown/75" />
-        </div>
-      </div>
-
-      {/* Herb Products */}
-      <div className="container mx-auto py-[100px]">
-        <h1 className="mb-20 text-[40px] font-bold text-center text-custom-green">Herb Products</h1>
-        <div className="flex justify-center gap-[100px]">
-          {herbs.map((product, index) => (
-            <ProductCardG key={index} product={product} /> // Use ProductCardG for herb products
-          ))}
-        </div>
-        
-        <div className="flex flex-col items-center mt-10">
-          <Link href={"/allProducts"}>
-            <button className="mt-7 w-[134px] h-[42px] bg-custom-green/75 text-white rounded-[12px] text-small hover:bg-custom-green/90 transition">
-              View All Products
-            </button>
-          </Link>
-          <FaAngleDoubleRight className="mt-2 text-center text-medium text-custom-green/75" />
-        </div>
-      </div>
-
-      {/* Handcraft Products */}
-      <div className="container mx-auto py-[100px]">
-        <h1 className="mb-20 text-[40px] font-bold text-center text-custom-brown">Handcraft Products</h1>
-        <div className="flex justify-center gap-[100px]">
-          {handcrafts.map((product, index) => (
-            <ProductCardB key={index} product={product} /> // Use ProductCardB for handcraft products
-          ))}
+      {/* Category Products Section */}
+      <div className="container mx-auto py-[100px] flex flex-col items-center">
+        {/* Spice Products */}
+        <div className="w-full mb-20 text-center">
+          <h1 className="text-3xl font-bold sm:text-4xl text-custom-brown">Spice Products</h1>
+          <div className="flex flex-wrap justify-center gap-10 mt-10">
+            {spices.map((product, index) => (
+              <ProductCardB key={index} product={product} />
+            ))}
+          </div>
+          <div className="flex flex-col items-center mt-10">
+            <Link href={"/allProducts"}>
+              <button className="mt-7 w-[134px] h-[42px] bg-custom-brown/75 text-white rounded-[12px] text-small hover:bg-custom-brown/90 transition">
+                View All Products
+              </button>
+            </Link>
+            <FaAngleDoubleRight className="mt-2 text-center text-medium text-custom-brown/75" />
+          </div>
         </div>
 
-        <div className="flex flex-col items-center mt-10">
-          <Link href={"/allProducts"}>
-            <button className="mt-7 w-[134px] h-[42px] bg-custom-brown/75 text-white rounded-[12px] text-small hover:bg-custom-brown/90 transition">
-              View All Products
-            </button>
-          </Link>
-          <FaAngleDoubleRight className="mt-2 text-center text-medium text-custom-brown/75" />
+        {/* Herb Products */}
+        <div className="w-full mb-20 text-center">
+          <h1 className="text-3xl font-bold sm:text-4xl text-custom-green">Herb Products</h1>
+          <div className="flex flex-wrap justify-center gap-10 mt-10">
+            {herbs.map((product, index) => (
+              <ProductCardG key={index} product={product} />
+            ))}
+          </div>
+          <div className="flex flex-col items-center mt-10">
+            <Link href={"/allProducts"}>
+              <button className="mt-7 w-[134px] h-[42px] bg-custom-green/75 text-white rounded-[12px] text-small hover:bg-custom-green/90 transition">
+                View All Products
+              </button>
+            </Link>
+            <FaAngleDoubleRight className="mt-2 text-center text-medium text-custom-green/75" />
+          </div>
         </div>
-      </div>
 
-      {/* Food & Beverages Products */}
-      <div className="container mx-auto py-[100px]">
-        <h1 className="mb-20 text-[40px] font-bold text-center text-custom-green">Food & Beverages</h1>
-        <div className="flex justify-center gap-[100px]">
-          {foods.map((product, index) => (
-            <ProductCardG key={index} product={product} /> // Use ProductCardG for food products
-          ))}
+        {/* Handcraft Products */}
+        <div className="w-full mb-20 text-center">
+          <h1 className="text-3xl font-bold sm:text-4xl text-custom-brown">Handcraft Products</h1>
+          <div className="flex flex-wrap justify-center gap-10 mt-10">
+            {handcrafts.map((product, index) => (
+              <ProductCardB key={index} product={product} />
+            ))}
+          </div>
+          <div className="flex flex-col items-center mt-10">
+            <Link href={"/allProducts"}>
+              <button className="mt-7 w-[134px] h-[42px] bg-custom-brown/75 text-white rounded-[12px] text-small hover:bg-custom-brown/90 transition">
+                View All Products
+              </button>
+            </Link>
+            <FaAngleDoubleRight className="mt-2 text-center text-medium text-custom-brown/75" />
+          </div>
         </div>
 
-        <div className="flex flex-col items-center mt-10">
-          <Link href={"/allProducts"}>
-            <button className="mt-7 w-[134px] h-[42px] bg-custom-green/75 text-white rounded-[12px] text-small hover:bg-custom-green/90 transition">
-              View All Products
-            </button>
-          </Link>
-          <FaAngleDoubleRight className="mt-2 text-center text-medium text-custom-green/75" />
+        {/* Food & Beverages Products */}
+        <div className="w-full text-center">
+          <h1 className="text-3xl font-bold sm:text-4xl text-custom-green">Food & Beverages</h1>
+          <div className="flex flex-wrap justify-center gap-10 mt-10">
+            {foods.map((product, index) => (
+              <ProductCardG key={index} product={product} />
+            ))}
+          </div>
+          <div className="flex flex-col items-center mt-10">
+            <Link href={"/allProducts"}>
+              <button className="mt-7 w-[134px] h-[42px] bg-custom-green/75 text-white rounded-[12px] text-small hover:bg-custom-green/90 transition">
+                View All Products
+              </button>
+            </Link>
+            <FaAngleDoubleRight className="mt-2 text-center text-medium text-custom-green/75" />
+          </div>
         </div>
       </div>
 
@@ -191,7 +203,7 @@ export default function Products() {
         <div className="slider-container">
           <Slider {...settings}>
             {products.map((product, index) => (
-              <ProductCardMore className="py-10" key={index} product={product} /> // Display all products in slider using ProductCardG
+              <ProductCardMore className="py-10" key={index} product={product} />
             ))}
           </Slider>
         </div>

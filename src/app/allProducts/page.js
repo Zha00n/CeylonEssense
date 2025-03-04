@@ -74,14 +74,14 @@ export default function ProductPage() {
         </div>
 
         {/* Product Grid */}
-        <div className="grid grid-cols-1 gap-10 px-20 mt-20 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+        <div className="grid grid-cols-1 gap-10 px-20 mt-20 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 2xl:gap-20">
           {filteredProducts.map((product) => (
             <div
               key={product.productId}
-              className="w-[220px] h-[320px] text-center bg-white shadow-lg rounded-lg overflow-hidden transition-all hover:scale-105"
+              className="w-[220px] h-[320px] text-center bg-white shadow-lg rounded-lg overflow-hidden transition-all hover:scale-105 2xl:w-[320px] 2xl:h-[450px]"
             >
               {/* Product Image */}
-              <div className="relative w-full h-[200px] ">
+              <div className="relative w-full h-[200px] 2xl:h-[300px]">
                 <img
                   src={`${API_URL}/${product.image[0]}`} // Assuming the first image in the array is the main image
                   alt={product.title}

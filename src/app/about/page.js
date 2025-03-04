@@ -20,7 +20,7 @@ export default function About() {
       <section className="h-screen">
         <div className="relative w-full h-full">
           <div className="absolute inset-0 bg-black opacity-60"></div>
-          <div className="flex flex-col absolute inset-0 justify-center text-[100px] font-bold ml-40">
+          <div className="flex flex-col absolute inset-0 justify-center text-[100px] font-bold ml-40 2xl:text-[150px]">
             <h1 className="text-custom-brown drop-shadow-2xl">What's</h1>
             <h1 className="text-custom-green drop-shadow-2xl">Ceylon Essence ?</h1>
           </div>
@@ -47,9 +47,9 @@ export default function About() {
         <div className="absolute inset-0 bg-white/90"></div>
 
         <section className="py-[100px] h-screen relative">
-          <div className="w-[50%] ml-auto mr-40 text-justify mx-auto justify-end drop-shadow-2xl">
-            <h1 className="text-[80px] inline text-custom-green/65 font-semibold">We are</h1>
-            <span className="text-[30px] text-[#767676] font-thinbold">
+          <div className="w-[50%] ml-auto mr-40 text-justify mx-auto justify-end drop-shadow-2xl 2xl:w-[60%]">
+            <h1 className="text-[80px] inline text-custom-green/65 font-semibold 2xl:text-[140px]">We are</h1>
+            <span className="text-[30px] text-[#767676] font-thinbold 2xl:text-[40px]">
               {" "}
               a passionate team dedicated to bringing the finest Sri Lankan spices, herbs, and natural products to the world. With a rich heritage rooted in the vibrant landscapes of Sri Lanka, we specialize in curating products that showcase the authentic flavors, healing properties, and rich cultural history of the island.
             </span>
@@ -58,11 +58,11 @@ export default function About() {
 
         <section className="py-[100px] h-screen relative">
           <div className="inset-0 flex items-center justify-center gap-20 mx-auto text-justify drop-shadow-2xl">
-            <div className="text-[70px] font-semibold pb-20">
+            <div className="text-[70px] font-semibold pb-20 2xl:text-[120px]">
               <h1 className="inline text-custom-green/65">What </h1>
               <span className="text-custom-green">We Do</span>
             </div>
-            <p className="text-[30px] text-[#767676] font-thinbold w-[40%]">
+            <p className="text-[30px] text-[#767676] font-thinbold w-[40%] 2xl:text-[40px]">
               Our commitment is simple: to offer you the purest, sustainably sourced products that capture the essence of Sri Lanka’s nature. From the bold warmth of Ceylon cinnamon to the soothing touch of local herbal remedies, we aim to connect you with the essence of Sri Lanka, no matter where you are in the world.
             </p>
           </div>
