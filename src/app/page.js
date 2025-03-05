@@ -3,6 +3,7 @@ import React from "react";
 import Navbar from "@/components/Navbar";
 import Hero from "@/components/Hero";
 import Footer from "@/components/Footer";
+import Contact from "@/components/Formweb";
 import Link from 'next/link';
 
 import Slider from "react-slick";
@@ -70,9 +71,8 @@ const HomePage = () => {
     <h2 className="mb-2 text-3xl text-green-600 sm:text-4xl md:text-5xl xl:text-5xl 2xl:text-8xl ">Welcome to</h2>
     <h1 className="text-5xl font-bold text-green-600 sm:text-6xl md:text-7xl xl:text-5xl 2xl:text-[100px]">Ceylon Essence</h1>
     <p className="max-w-2xl mx-auto mt-6 text-sm leading-relaxed text-justify text-gray-600 sm:text-base md:text-lg lg:mx-0">
-      Lorem ipsum, dolor sit amet consectetur adipisicing elit. Pariatur maiores maxime expedita debitis, 
-      fuga numquam labore quia aspernatur dolores hic inventore, suscipit architecto, rerum nulla 
-      consectetur excepturi nam modi rem.
+    Discover the authentic flavors, healing properties, and rich cultural heritage of Sri Lanka. At Ceylon Essence, we are committed to bringing you the finest spices, herbs, and natural products, all sustainably sourced from the heart of Sri Lanka. Join us in experiencing the pure essence of this beautiful island, crafted with care and respect for nature, culture, and community.
+
     </p>
     <Link href="/about">
       <button className="text-white bg-green-500 rounded-full sm:text-sm sm:py-2 sm:mt-4 sm:px-4 md:text-base md:py-2.5 md:mt-5 md:px-5 lg:text-lg lg:py-3 lg:mt-6 lg:px-6 xl:text-lg xl:py-3 xl:mt-6 xl:px-6 2xl:text-xl 2xl:py-4 2xl:mt-8 2xl:px-8
@@ -186,13 +186,7 @@ const HomePage = () => {
   </div>
 
   <p className="justify-center mx-auto mt-20 text-justify px-[20px] sm:px-[50px] md:px-[100px] lg:px-[150px] xl:px-[200px] 2xl:px-[250px] text-zinc-600 text-1xl 2xl:text-2xl 2xl:mt-40">
-    Lorem ipsum dolor sit amet consectetur adipisicing elit. Aliquid eum
-    minima, maiores odit modi id accusamus natus dolores labore quae
-    accusantium nulla molestiae vitae ex veniam pariatur beatae ducimus
-    ipsum! Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-    Mollitia, expedita quis veritatis id ipsam molestias laudantium ipsa
-    error iste repellat provident corrupti nam quam eius fugiat
-    voluptatibus consectetur animi eligendi?
+  Discover the true essence of Sri Lanka through our carefully curated collection of products. From the bold and aromatic spices like Ceylon cinnamon to the finely crafted handcrafts reflecting the island's rich cultural heritage, each item tells a story of authenticity and tradition. Our herbs, sustainably sourced from Sri Lanka’s lush landscapes, offer natural remedies and wellness benefits, while our food & beverages bring the island’s flavors to your table, from aromatic teas to delicious local treats. Browse through our images to explore these categories, each crafted with care and commitment to sustainability. At Ceylon Essence, we’re proud to share the island’s finest offerings with the world. 
   </p>
 </section>
 
@@ -320,12 +314,18 @@ const HomePage = () => {
   </div>
 
   <div className="justify-center w-full mx-auto text-center px-[20px] sm:px-[100px] md:px-[150px] lg:px-[180px] xl:px-[200px] 2xl:px-[250px]">
-  <p className="justify-center mx-auto mt-20 text-lg text-justify text-zinc-600 2xl:text-2xl">
-    Lorem ipsum, dolor sit amet consectetur adipisicing elit. Pariatur maiores maxime expedita debitis, fuga numquam labore quia aspernatur dolores hic inventore, suscipit architecto, rerum nulla consectetur excepturi nam modi rem.
+  <p className="justify-center mx-auto mt-20 text-lg italic font-thinbold text-zinc-600 2xl:text-2xl">
+
+" Sri Lanka, historically known as Ceylon, has been a hub of global trade for centuries. Renowned for its valuable spices, herbs, and natural resources, the island attracted traders from across the world long before modern commerce. The legacy of Ceylon's rich trade history is deeply embedded in its culture, with ancient maritime routes connecting Sri Lanka to Europe, the Middle East, and Asia."
+<br/><br/>
+"At Ceylon Essence, we honor this timeless heritage by continuing the tradition of offering the world Sri Lanka’s finest products, crafted with the same care and quality that made Ceylon famous. Our commitment to preserving this legacy means we work closely with local artisans and farmers to ensure the authenticity, sustainability, and integrity of every product. We invite you to explore the flavors, crafts, and natural treasures that have made Sri Lanka a prized destination for trade throughout history."
   </p>
+  <Link href={'/about'}>
   <button className="mt-[20px] bg-green-500 text-white px-2 py-1 rounded-full text-sm 2xl:text-2xl 2xl:mt-[70px]">
     Read More
   </button>
+  </Link>
+
 </div>
 </section>
 
@@ -340,10 +340,7 @@ const HomePage = () => {
         <p className="text-5xl font-bold text-custom-brown 2xl:text-7xl">to Product</p>
       </div>
       <p className="px-16 mt-10 text-[20px] text-custom-brown/70 leading-tight sm:px-12 md:px-14 lg:px-16 xl:px-20 2xl:mt-20">
-        Lorem ipsum dolor sit amet consectetur adipisicing elit.
-        Consequuntur voluptatem optio voluptas sint corrupti quibusdam
-        numquam neque? Iure autem velit mollitia. Obcaecati sunt quasi
-        illo sequi similique omnis perferendis officiis.
+      At Ceylon Essence, every product tells a story of care, craftsmanship, and authenticity. Our journey begins with the careful selection of plants, herbs, and spices, grown in Sri Lanka’s fertile soil. Through sustainable farming practices, we ensure that each product is nurtured with respect for both the land and its people.
       </p>
       <Link href={"/resourceCenter"}>
         <button className="mt-[20px] bg-custom-brown/70 text-white px-2 py-1 rounded-full text-sm ml-16 2xl:mt-15 2xl:text-md">
@@ -373,77 +370,12 @@ const HomePage = () => {
   <h3 className="text-3xl sm:text-4xl md:text-5xl lg:text-5xl xl:text-6xl 2xl:text-8xl font-bold text-custom-green mt-2 sm:ml-[20px] md:ml-[40px] lg:ml-[100px] 2xl:ml-[200px] ml-[20px]">
     Reach Out Today!
   </h3>
-        
-        <div className="mt-[100px] pb-[100px]">
-          <div className="grid sm:grid-cols-2 items-start gap-12 p-8 mx-auto max-w-4xl bg-white shadow-[0_2px_10px_-3px_rgba(6,81,237,0.3)] rounded-md font-[sans-serif]">
-            <div>
-              <h1 className="text-3xl font-bold text-gray-800/70">Let's Talk</h1>
-              <p className="mt-4 text-sm text-gray-500/70">
-                Have some big idea or brand to develop and need help? Then reach
-                out we'd love to hear about your project and provide help.
-              </p>
 
-              <div className="mt-12">
-                <h2 className="text-base font-bold text-gray-800/70">Email</h2>
-                <ul className="mt-4">
-                  <li className="flex items-center">
-                    <div className="bg-[#e6e6e6cf] h-10 w-10 rounded-full flex items-center justify-center shrink-0">
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="20px"
-                        height="20px"
-                        fill="#1D9325"
-                        viewBox="0 0 479.058 479.058"
-                      >
-                        <path
-                          d="M434.146 59.882H44.912C20.146 59.882 0 80.028 0 104.794v269.47c0 24.766 20.146 44.912 44.912 44.912h389.234c24.766 0 44.912-20.146 44.912-44.912v-269.47c0-24.766-20.146-44.912-44.912-44.912zm0 29.941c2.034 0 3.969.422 5.738 1.159L239.529 264.631 39.173 90.982a14.902 14.902 0 0 1 5.738-1.159zm0 299.411H44.912c-8.26 0-14.971-6.71-14.971-14.971V122.615l199.778 173.141c2.822 2.441 6.316 3.655 9.81 3.655s6.988-1.213 9.81-3.655l199.778-173.141v251.649c-.001 8.26-6.711 14.97-14.971 14.97z"
-                          data-original="#000000"
-                        />
-                      </svg>
-                    </div>
-                    <a
-                      href="javascript:void(0)"
-                      className="ml-4 text-sm text-custom-green"
-                    >
-                      <small className="block">Mail</small>
-                      <strong>info@ceylonessence.com</strong>
-                    </a>
-                  </li>
-                </ul>
-              </div>
-            </div>
 
-            <form className="space-y-4 ml-auo">
-              <input
-                type="text"
-                placeholder="Name"
-                className="w-full text-gray-800 rounded-md py-2.5 px-4 border text-sm outline-none focus:border-custom-green"
-              />
-              <input
-                type="email"
-                placeholder="Email"
-                className="w-full text-gray-800 rounded-md py-2.5 px-4 border text-sm outline-none focus:border-custom-green"
-              />
-              <input
-                type="text"
-                placeholder="Subject"
-                className="w-full text-gray-800 rounded-md py-2.5 px-4 border text-sm outline-none focus:border-custom-green"
-              />
-              <textarea
-                placeholder="Message"
-                rows="6"
-                className="w-full text-gray-800 rounded-md px-4 border text-sm pt-2.5 outline-none focus:border-custom-green"
-              ></textarea>
-              <button
-                type="button"
-                className="text-white bg-custom-green hover:bg-custom-green rounded-md text-sm px-4 py-2.5 w-full !mt-6"
-              >
-                Send
-              </button>
-            </form>
-          </div>
-        </div>
+  <Contact/>    
+
       </section>
+
       <Footer />
     </>
   );

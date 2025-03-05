@@ -44,6 +44,18 @@ export default function Products() {
     return (
       <>
         <Navbar />
+        <div className="relative w-full h-screen">
+        <div className="absolute md:mt-10 lg:mt-20 2xl:mt-40 md:ml-10 lg:ml-20 2xl:ml-40 sm:text-[30px] md:text-[60px] lg:text-[80px] 2xl:text-[150px]">
+          <h1 className="font-extrabold text-white drop-shadow-2xl">Nature’s Treasure, </h1>
+          <h1 className="font-extrabold text-white drop-shadow-2xl">Ceylon’s Best,</h1>
+          <h1 className="font-extrabold text-white drop-shadow-2xl">Your Delight.</h1>
+        </div>
+        <img
+          src={"images/image.jpg"}
+          alt="Spices"
+          className="object-cover w-full h-full"
+        />
+      </div>
         <div className="container mx-auto py-[100px] text-center">
           <h1 className="text-2xl text-gray-600">No products available</h1>
         </div>
@@ -64,7 +76,7 @@ export default function Products() {
       {
         breakpoint: 2560,
         settings: {
-          slidesToShow: 5,
+          slidesToShow: 6,
           slidesToScroll: 1,
           infinite: true,
           dots: false
@@ -73,7 +85,7 @@ export default function Products() {
       {
         breakpoint: 1440,
         settings: {
-          slidesToShow: 5,
+          slidesToShow: 4,
           slidesToScroll: 2,
           initialSlide: 2
         }
