@@ -5,6 +5,7 @@
   "scripts": {
     "dev": "next dev --turbopack",
     "build": "next build",
+    "export": "next build && next export",
     "start": "next start",
     "lint": "next lint"
   },
@@ -23,6 +24,8 @@
     "@tailwindcss/postcss": "^4.0.0",
     "autoprefixer": "^10.4.20",
     "axios": "^1.8.0",
+    "bespoke": "^1.1.0",
+    "bespoke-keys": "^1.1.0",
     "framer-motion": "^12.4.5",
     "next": "^15.1.6",
     "react": "^19.0.0",

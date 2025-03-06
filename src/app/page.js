@@ -200,43 +200,43 @@ const HomePage = () => {
     <Slider {...settings}>
       {[
         {
-          img: "https://travellersisle.com/wp-content/uploads/2022/04/Tea-history-in-Sri-Lanka-920x613.webp",
+          img: "images/tea.webp",
           title: "Ceylon Tea",
           description:
             "The ancient Ceylon tea trade, rooted in Sri Lanka's lush highlands, flourished as a vital export, shaping global tea culture with its rich, aromatic blends",
         },
         {
-          img: "https://lankapura.com/wp-content/gallery/people-and-lifestyle/teal-pickers-ceylon.jpg",
+          img: "images/coffee.webp",
           title: "Coffee",
           description:
             "Once the king of exports, Sri Lanka’s coffee had its moment — until tea took over the throne.",
         },
         {
-          img: "https://lakcinnamongroup.lk/wp-content/uploads/2020/08/History-3-1170x700.jpg",
+          img: "images/cinnamon1.webp",
           title: "Cinnoman",
           description:
             "Cinnamon, native to Sri Lanka, has been a prized spice for centuries, valued for its sweet flavor and medicinal properties.",
         },
         {
-          img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTZURSMNA5PyP5q0O2d0fzZvv-Lcp5G5R7yFQ&s",
+          img: "images/rubber.webp",
           title: "Rubber",
           description:
             "Bouncing from the island to the world, Sri Lankan rubber revolutionized industries and kept economies rolling.",
         },
         {
-          img: "https://raayagems.com/cdn/shop/articles/srilanka_jpg.webp?v=1728032825",
+          img: "images/gem.webp",
           title: "Gems",
           description:
             "Sri Lankan gems, sparkling with centuries of history, have always dazzled the world’s elite.",
         },
         {
-          img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTCbUs4XMX_2VOnais2mNktT7TQ6pSNJntLtA&s",
+          img: "images/coconut.webp",
           title: "Coconut",
           description:
             "From oil to coir, Sri Lanka’s coconuts have been trading treasures, versatile and ever-valuable.",
         },
         {
-          img: "https://damiatea.com/wp-content/uploads/2023/06/Anverallytea.jpg",
+          img: "images/pearl.webp",
           title: "Pearls",
           description:
             "Sri Lanka’s pearls, glistening with timeless beauty, have been the island’s lustrous treasure in global trade for centuries.",
@@ -247,43 +247,43 @@ const HomePage = () => {
 
 
         {
-          img: "https://travellersisle.com/wp-content/uploads/2022/04/Tea-history-in-Sri-Lanka-920x613.webp",
+          img: "images/tea2.webp",
           title: "Ceylon Tea",
           description:
             "The ancient Ceylon tea trade, rooted in Sri Lanka's lush highlands, flourished as a vital export, shaping global tea culture with its rich, aromatic blends",
         },
         {
-          img: "https://lankapura.com/wp-content/gallery/people-and-lifestyle/teal-pickers-ceylon.jpg",
+          img: "images/coffee2.webp",
           title: "Coffee",
           description:
             "Once the king of exports, Sri Lanka’s coffee had its moment — until tea took over the throne.",
         },
         {
-          img: "https://lakcinnamongroup.lk/wp-content/uploads/2020/08/History-3-1170x700.jpg",
+          img: "images/cinnamon2.webp",
           title: "Cinnoman",
           description:
             "Cinnamon, native to Sri Lanka, has been a prized spice for centuries, valued for its sweet flavor and medicinal properties.",
         },
         {
-          img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTZURSMNA5PyP5q0O2d0fzZvv-Lcp5G5R7yFQ&s",
+          img: "images/rubber2.webp",
           title: "Rubber",
           description:
             "Bouncing from the island to the world, Sri Lankan rubber revolutionized industries and kept economies rolling.",
         },
         {
-          img: "https://raayagems.com/cdn/shop/articles/srilanka_jpg.webp?v=1728032825",
+          img: "images/gem2.webp",
           title: "Gems",
           description:
             "Sri Lankan gems, sparkling with centuries of history, have always dazzled the world’s elite.",
         },
         {
-          img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTCbUs4XMX_2VOnais2mNktT7TQ6pSNJntLtA&s",
-          title: "Coconut",
+          img: "images/coconut2.webp",
+          title: "Coconut2",
           description:
             "From oil to coir, Sri Lanka’s coconuts have been trading treasures, versatile and ever-valuable.",
         },
         {
-          img: "https://damiatea.com/wp-content/uploads/2023/06/Anverallytea.jpg",
+          img: "images/pearl2.webp",
           title: "Pearls",
           description:
             "Sri Lanka’s pearls, glistening with timeless beauty, have been the island’s lustrous treasure in global trade for centuries.",
@@ -330,16 +330,16 @@ const HomePage = () => {
 </section>
 
 <section className="max-h-screen ">
-  <div className="flex justify-center gap-2 mx-auto">
-    <div className="ml-[100px] w-[550px] py-7 sm:w-[600px] md:w-[650px] lg:w-[700px] xl:w-[800px] 2xl:w-[900px]">
-      <p className="text-3xl font-bold tracking-[2] text-custom-brown/80 2xl:text-4xl">
+  <div className="flex flex-col justify-center gap-2 mx-auto lg:flex-row md:items-center">
+    <div className="md:ml-[100px] ml-[40px] w-300px py-7 sm:w-[600px] md:w-[650px] lg:w-[700px] xl:w-[800px] 2xl:w-[900px]">
+      <p className="md:text-3xl text-1xl font-bold md:tracking-[2] text-custom-brown/80 2xl:text-4xl">
         Explore the Journey of Quality,
       </p>
       <div className="flex gap-5 mt-5">
-        <p className="text-5xl font-bold text-custom-green 2xl:text-7xl">From Plant</p>
-        <p className="text-5xl font-bold text-custom-brown 2xl:text-7xl">to Product</p>
+        <p className="text-2xl font-bold md:text-5xl text-custom-green 2xl:text-7xl">From Plant</p>
+        <p className="text-2xl font-bold md:text-5xl text-custom-brown 2xl:text-7xl">to Product</p>
       </div>
-      <p className="px-16 mt-10 text-[20px] text-custom-brown/70 leading-tight sm:px-12 md:px-14 lg:px-16 xl:px-20 2xl:mt-20">
+      <p className="px-10 mt-10 text-[15px] md:text-[20px] text-custom-brown/70 leading-tight sm:px-12 md:px-10 lg:px-16 xl:px-20 2xl:mt-20">
       At Ceylon Essence, every product tells a story of care, craftsmanship, and authenticity. Our journey begins with the careful selection of plants, herbs, and spices, grown in Sri Lanka’s fertile soil. Through sustainable farming practices, we ensure that each product is nurtured with respect for both the land and its people.
       </p>
       <Link href={"/resourceCenter"}>
@@ -348,7 +348,7 @@ const HomePage = () => {
         </button>
       </Link>
     </div>
-    <div className="w-[680px] h-[420px] rounded-lg sm:w-[700px] sm:h-[440px] md:w-[750px] md:h-[480px] lg:w-[800px] lg:h-[520px] xl:w-[900px] xl:h-[560px] 2xl:w-[1000px] 2xl:h-[600px]">
+    <div className="w-[680px] h-[420px] rounded-lg sm:w-[700px] sm:h-[440px] md:w-[750px] md:h-[480px] lg:w-[800px] lg:h-[520px] xl:w-[900px] xl:h-[560px] 2xl:w-[1000px] 2xl:h-[600px] hidden md:block">
       <video
         className="object-cover border rounded-lg border-zinc-200"
         autoPlay
