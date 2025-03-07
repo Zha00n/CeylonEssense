@@ -45,7 +45,7 @@ export default function Products() {
       <>
         <Navbar />
         <div className="relative w-full h-screen">
-        <div className="absolute md:mt-10 lg:mt-20 2xl:mt-40 md:ml-10 lg:ml-20 2xl:ml-40 sm:text-[30px] md:text-[60px] lg:text-[80px] 2xl:text-[150px]">
+        <div className="absolute mt-40 md:mt-36 lg:mt-20 2xl:mt-40 ml-10 md:ml-10 lg:ml-20 2xl:ml-40 text-[30px] sm:text-[30px] md:text-[60px] lg:text-[80px] 2xl:text-[150px]">
           <h1 className="font-extrabold text-white drop-shadow-2xl">Nature’s Treasure, </h1>
           <h1 className="font-extrabold text-white drop-shadow-2xl">Ceylon’s Best,</h1>
           <h1 className="font-extrabold text-white drop-shadow-2xl">Your Delight.</h1>

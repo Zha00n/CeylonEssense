@@ -1,6 +1,6 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  output: 'export',
+  // output: 'export',
   images: {
       domains: ['api.ceylon-assence.residuesolution.xyz'], // Allow localhost as a valid image domain
     },
